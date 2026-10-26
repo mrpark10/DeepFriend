@@ -1,0 +1,11 @@
+{
+  "name": "df-test-notebooks",
+  "publisher": "deepfriend-test",
+  "version": "0.0.1",
+  "engines": { "vscode": "^1.93.0" },
+  "main": "./extension.js",
+  "activationEvents": ["onStartupFinished"],
+  "contributes": {
+    "notebooks": [{ "type": "df-test-nb", "displayName": "DF test", "selector": [{ "filenamePattern": "*.dftestnb" }] }]
+  }
+}

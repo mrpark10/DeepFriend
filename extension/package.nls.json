@@ -26,5 +26,6 @@
   "cfg.shapeHints": "레이어 줄 끝에 데이터 크기(예: → (32, 64, 112, 112))를 회색 글씨로 보여줘요.",
   "cfg.runtimeCheck": "PyTorch가 설치돼 있으면 실제 계산 없이 크기만 계산하는 가짜 텐서(meta)로 크기를 한 번 더 확인해요. 학습 코드 전체는 실행하지 않아요.",
   "cfg.pythonPath": "DeepFriend가 쓸 파이썬 실행 파일 경로예요. 비워 두면 자동으로 찾아요.",
-  "cfg.errorReporting": "DeepFriend 내부 오류가 나면 'GitHub에 신고하기' 버튼을 보여줘요. 정보는 자동으로 보내지지 않고, 내용을 보고 직접 제출해요."
+  "cfg.errorReporting": "DeepFriend 내부 오류가 나면 'GitHub에 신고하기' 버튼을 보여줘요. 정보는 자동으로 보내지지 않고, 내용을 보고 직접 제출해요.",
+  "task.description": "DeepFriend 작업 종류"
 }

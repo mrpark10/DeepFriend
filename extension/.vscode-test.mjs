@@ -15,6 +15,7 @@ export default defineConfig({
   files: 'out/test/suite/**/*.test.js',
   version: process.env.DEEPFRIEND_TEST_VSCODE || '1.93.0',
   workspaceFolder: workspace,
+  extensionDevelopmentPath: [here, join(here, 'src', 'test', 'fixtures', 'nb-ext')],
   launchArgs: ['--disable-extensions', '--disable-workspace-trust'],
   env: { DEEPFRIEND_TEST_PYTHON: python },
   mocha: { ui: 'tdd', timeout: 60000 },

@@ -4,6 +4,7 @@ import { config, detectFramework } from './config';
 import { AnalysisStore } from './f1/analysisStore';
 import { registerF1 } from './f1';
 import { registerF7 } from './f7';
+import { F3Api, registerF3 } from './f3';
 import { setLanguage, t } from './i18n/i18n';
 import { findPython, PythonInfo } from './python/findPython';
 import { nodeFindDeps } from './python/nodeDeps';
@@ -17,6 +18,7 @@ import { applyTerminalEnv } from './terminalEnv';
 export interface DeepFriendApi {
   client: AnalysisClient;
   store: AnalysisStore;
+  errors: F3Api;
   status(): Status;
   python(): PythonInfo | null;
   ensureServer(): Promise<boolean>;
@@ -199,6 +201,7 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<DeepFriend
   });
   const f1 = registerF1(ctx, store);
   registerF7(ctx, store);
+  const errors = registerF3(ctx, { pythonCommand: () => python?.command ?? null });
   ctx.subscriptions.push(
     vscode.workspace.onDidOpenTextDocument((d) => store.onOpen(d)),
     vscode.workspace.onDidChangeTextDocument((e) => {
@@ -228,6 +231,7 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<DeepFriend
   return {
     client,
     store,
+    errors,
     status: () => status.get(),
     python: () => python,
     ensureServer,

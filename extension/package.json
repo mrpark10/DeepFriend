@@ -158,7 +158,21 @@
           "order": 11
         }
       }
-    }
+    },
+    "taskDefinitions": [
+      {
+        "type": "deepfriend",
+        "required": [
+          "task"
+        ],
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "%task.description%"
+          }
+        }
+      }
+    ]
   },
   "scripts": {
     "copy-assets": "node scripts/copy-assets.mjs",
