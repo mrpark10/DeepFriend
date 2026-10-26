@@ -71,6 +71,9 @@ export const en: Record<StringKey, string> = {
   'input.placeholder': 'e.g. (32, 3, 224, 224)',
   'input.invalid': 'Use the form (number, number, ...), e.g. (32, 1, 28, 28)',
   'input.kerasPrompt': 'Enter the shape of the data going into the Keras model. You can write None for the batch size.',
+  'hover.params': 'Parameters',
+  'hover.doc': 'Official docs',
+  'hover.shape': 'Data shape on this line: `{shape}`',
   'common.cancel': 'Cancel',
   'common.ok': 'OK',
 };

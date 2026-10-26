@@ -70,6 +70,9 @@ export const ko = {
   'input.placeholder': '예: (32, 3, 224, 224)',
   'input.invalid': '(숫자, 숫자, ...) 모양으로 적어 주세요. 예: (32, 1, 28, 28)',
   'input.kerasPrompt': 'Keras 모델에 들어갈 데이터 크기를 적어 주세요. 배치 크기 자리는 None으로 적어도 돼요.',
+  'hover.params': '매개변수',
+  'hover.doc': '공식 문서',
+  'hover.shape': '이 줄의 데이터 크기: `{shape}`',
   'common.cancel': '취소',
   'common.ok': '확인',
 } as const;

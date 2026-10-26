@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import { config, detectFramework } from './config';
 import { AnalysisStore } from './f1/analysisStore';
 import { registerF1 } from './f1';
+import { registerF7 } from './f7';
 import { setLanguage, t } from './i18n/i18n';
 import { findPython, PythonInfo } from './python/findPython';
 import { nodeFindDeps } from './python/nodeDeps';
@@ -197,6 +198,7 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<DeepFriend
     }
   });
   const f1 = registerF1(ctx, store);
+  registerF7(ctx, store);
   ctx.subscriptions.push(
     vscode.workspace.onDidOpenTextDocument((d) => store.onOpen(d)),
     vscode.workspace.onDidChangeTextDocument((e) => {
