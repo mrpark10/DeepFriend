@@ -42,6 +42,7 @@ export class RunWatcher implements vscode.Disposable {
   readonly onDidUpdate = this.emitter.event;
   private disposables: vscode.Disposable[] = [];
   private timer: ReturnType<typeof setInterval>;
+  private scanTimer: ReturnType<typeof setInterval>;
   pinned: string | undefined;
 
   constructor() {
@@ -59,6 +60,9 @@ export class RunWatcher implements vscode.Disposable {
         }
       }
     }, 1000);
+    // File-system events can be late or missing (Linux inotify limits, network drives):
+    // look for new run folders every few seconds as a safety net.
+    this.scanTimer = setInterval(() => void this.scan(), 3000);
     void this.scan();
   }
 
@@ -92,6 +96,7 @@ export class RunWatcher implements vscode.Disposable {
 
   dispose(): void {
     clearInterval(this.timer);
+    clearInterval(this.scanTimer);
     this.disposables.forEach((d) => d.dispose());
   }
 }

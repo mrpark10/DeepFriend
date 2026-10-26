@@ -63,7 +63,7 @@ def main() -> None:
             path = os.path.join(d, "train.py")
             with open(path, "w") as f:
                 f.write(code)
-            p = subprocess.run([sys.executable, path], capture_output=True, text=True, cwd=d, timeout=300)
+            p = subprocess.run([sys.executable, path], capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=d, timeout=300)
             if p.returncode == 0:
                 print("NO ERROR:", name)
                 continue

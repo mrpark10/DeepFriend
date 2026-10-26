@@ -53,10 +53,10 @@ def _accuracy(torch: Any, kind: str, inp: Any, target: Any) -> Tuple[Optional[fl
                 if tgt.shape != pred.shape:
                     return None, classes
                 valid = tgt != -100
-                n = int(valid.sum())
+                correct, n = torch.stack([((pred == tgt) & valid).sum(), valid.sum()]).tolist()  # one sync
                 if n == 0:
                     return None, classes
-                return float((pred[valid] == tgt[valid]).float().sum()) / n, classes
+                return correct / n, classes
             if kind in ("bce", "bce_logits"):
                 thr = 0.0 if kind == "bce_logits" else 0.5
                 if inp.shape != target.shape:

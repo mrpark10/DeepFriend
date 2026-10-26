@@ -45,7 +45,7 @@ def run(name, tmp_path):
     shutil.copytree(EX, work)
     env = dict(os.environ, PYTHONPATH=PKG, TF_CPP_MIN_LOG_LEVEL="3", PYTHONIOENCODING="utf-8")
     env.pop("DEEPFRIEND_WORKSPACE", None)
-    return subprocess.run([sys.executable, name], cwd=str(work), env=env, capture_output=True, text=True, timeout=300), work
+    return subprocess.run([sys.executable, name], cwd=str(work), env=env, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=300), work
 
 
 @pytest.mark.parametrize("name", ["01_mnist_mlp.py", "02_cifar_cnn.py"])

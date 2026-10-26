@@ -19,7 +19,7 @@ def run_script(project, code, env_extra=None, timeout=240, expect_ok=True):
     env.pop("DEEPFRIEND_WORKSPACE", None)
     env.pop("DEEPFRIEND_RECORD", None)
     env.update(env_extra or {})
-    p = subprocess.run([sys.executable, str(script)], cwd=str(project), env=env, capture_output=True, text=True, timeout=timeout)
+    p = subprocess.run([sys.executable, str(script)], cwd=str(project), env=env, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=timeout)
     if expect_ok:
         assert p.returncode == 0, p.stderr[-3000:]
     return p
@@ -231,7 +231,7 @@ def test_watch_never_raises_in_read_only_project(tmp_path):
     try:
         env = dict(os.environ, PYTHONPATH=PKG_ROOT)
         env.pop("DEEPFRIEND_WORKSPACE", None)
-        p = subprocess.run([sys.executable, str(project / "train.py")], cwd=str(project), env=env, capture_output=True, text=True, timeout=60)
+        p = subprocess.run([sys.executable, str(project / "train.py")], cwd=str(project), env=env, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=60)
     finally:
         os.chmod(project, stat.S_IRWXU)
     assert p.returncode == 0, p.stderr
@@ -298,13 +298,14 @@ def test_stdlib_only_import_and_watch(tmp_path):
 
 
 def test_overhead_is_small(tmp_path):
+    """watch() adds at most 30% or 0.1 ms per training step (a realistic small model)."""
     pytest.importorskip("torch")
     body = """
 import time, torch, torch.nn as nn, torch.nn.functional as F
 WATCH
 torch.manual_seed(0)
-m = nn.Linear(16, 4); opt = torch.optim.SGD(m.parameters(), lr=0.01)
-x = torch.randn(32, 16); y = torch.randint(0, 4, (32,))
+m = nn.Sequential(nn.Linear(256, 256), nn.ReLU(), nn.Linear(256, 10)); opt = torch.optim.SGD(m.parameters(), lr=0.01)
+x = torch.randn(64, 256); y = torch.randint(0, 10, (64,))
 for _ in range(50):
     opt.zero_grad(); F.cross_entropy(m(x), y).backward(); opt.step()
 t = time.perf_counter()
@@ -318,7 +319,7 @@ open("t.txt", "w").write(repr(time.perf_counter() - t))
     run_script(watched, body.replace("WATCH", "import deepfriend; deepfriend.watch()"))
     t0 = float((base / "t.txt").read_text())
     t1 = float((watched / "t.txt").read_text())
-    assert t1 <= max(t0 * 1.6, t0 + 0.15), (t0, t1)
+    assert t1 <= max(t0 * 1.3, t0 + 2000 * 0.0001), (t0, t1)
 
 
 def test_star_set_by_the_extension_survives_meta_rewrites(tmp_path):
