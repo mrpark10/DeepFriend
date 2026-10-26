@@ -34,6 +34,8 @@ def parse_shapes(text: str) -> Optional[List[Shape]]:
         for d in elt.elts:
             if isinstance(d, ast.Constant) and isinstance(d.value, int) and not isinstance(d.value, bool) and d.value > 0:
                 dims.append(d.value)
+            elif isinstance(d, ast.Constant) and d.value is None:
+                dims.append("None")  # Keras batch dimension
             elif isinstance(d, ast.Name) and _NAME_RE.match(d.id):
                 dims.append(d.id)
             else:
