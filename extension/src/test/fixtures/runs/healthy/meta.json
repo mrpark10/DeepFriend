@@ -1,0 +1,40 @@
+{
+  "id": "20261026-194930-142c",
+  "name": "healthy",
+  "script": "healthy.py",
+  "cwd": "/home/student/project",
+  "startedAt": "2026-10-26T19:49:30+09:00",
+  "endedAt": "2026-10-26T19:49:30+09:00",
+  "status": "finished",
+  "pid": 12345,
+  "framework": "pytorch",
+  "config": {
+    "batch_size": 32,
+    "optimizer": "Adam",
+    "lr": 0.001
+  },
+  "model": {
+    "params": 484
+  },
+  "numClasses": 4,
+  "final": {
+    "loss": 0.08714462791023583,
+    "acc": 0.9956896551724138,
+    "val_loss": 0.11658606678247452,
+    "val_acc": 0.9788707386363636
+  },
+  "best": {
+    "loss": 0.08714462791023583,
+    "loss_epoch": 5,
+    "acc": 0.9956896551724138,
+    "acc_epoch": 4,
+    "val_loss": 0.11658606678247452,
+    "val_loss_epoch": 5,
+    "val_acc": 0.9808238636363636,
+    "val_acc_epoch": 4
+  },
+  "starred": false,
+  "deepfriendVersion": "0.1.0",
+  "git": null,
+  "record": true
+}

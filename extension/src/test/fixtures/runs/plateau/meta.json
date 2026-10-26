@@ -1,0 +1,40 @@
+{
+  "id": "20261026-194933-7ada",
+  "name": "plateau",
+  "script": "plateau.py",
+  "cwd": "/home/student/project",
+  "startedAt": "2026-10-26T19:49:33+09:00",
+  "endedAt": "2026-10-26T19:49:33+09:00",
+  "status": "finished",
+  "pid": 12345,
+  "framework": "pytorch",
+  "config": {
+    "batch_size": 32,
+    "optimizer": "SGD",
+    "lr": 1e-07
+  },
+  "model": {
+    "params": 484
+  },
+  "numClasses": 4,
+  "final": {
+    "loss": 1.5510123639271176,
+    "acc": 0.23599137931034483,
+    "val_loss": 1.5684278011322021,
+    "val_acc": 0.2512428977272727
+  },
+  "best": {
+    "loss": 1.5234549168882698,
+    "loss_epoch": 0,
+    "acc": 0.2510775862068966,
+    "acc_epoch": 0,
+    "val_loss": 1.5684278011322021,
+    "val_loss_epoch": 3,
+    "val_acc": 0.2512428977272727,
+    "val_acc_epoch": 0
+  },
+  "starred": false,
+  "deepfriendVersion": "0.1.0",
+  "git": null,
+  "record": true
+}

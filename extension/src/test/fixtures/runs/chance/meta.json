@@ -1,0 +1,40 @@
+{
+  "id": "20261026-194934-6af9",
+  "name": "chance",
+  "script": "chance.py",
+  "cwd": "/home/student/project",
+  "startedAt": "2026-10-26T19:49:34+09:00",
+  "endedAt": "2026-10-26T19:49:35+09:00",
+  "status": "finished",
+  "pid": 12345,
+  "framework": "pytorch",
+  "config": {
+    "batch_size": 64,
+    "optimizer": "Adam",
+    "lr": 0.001
+  },
+  "model": {
+    "params": 346
+  },
+  "numClasses": 10,
+  "final": {
+    "loss": 2.317256820201874,
+    "acc": 0.111328125,
+    "val_loss": 2.335428833961487,
+    "val_acc": 0.06989626024590165
+  },
+  "best": {
+    "loss": 2.317256820201874,
+    "loss_epoch": 4,
+    "acc": 0.111328125,
+    "acc_epoch": 4,
+    "val_loss": 2.335428833961487,
+    "val_loss_epoch": 4,
+    "val_acc": 0.09653560450819672,
+    "val_acc_epoch": 1
+  },
+  "starred": false,
+  "deepfriendVersion": "0.1.0",
+  "git": null,
+  "record": true
+}

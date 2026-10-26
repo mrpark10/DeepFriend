@@ -1,0 +1,40 @@
+{
+  "id": "20261026-194932-592c",
+  "name": "overfit",
+  "script": "overfit.py",
+  "cwd": "/home/student/project",
+  "startedAt": "2026-10-26T19:49:32+09:00",
+  "endedAt": "2026-10-26T19:49:32+09:00",
+  "status": "finished",
+  "pid": 12345,
+  "framework": "pytorch",
+  "config": {
+    "batch_size": 8,
+    "optimizer": "Adam",
+    "lr": 0.001
+  },
+  "model": {
+    "params": 275460
+  },
+  "numClasses": 4,
+  "final": {
+    "loss": 0.00011871073220390827,
+    "acc": 1.0,
+    "val_loss": 1.3250137865543365,
+    "val_acc": 0.6780037715517242
+  },
+  "best": {
+    "loss": 0.00011871073220390827,
+    "loss_epoch": 39,
+    "acc": 1.0,
+    "acc_epoch": 3,
+    "val_loss": 0.6534834206104279,
+    "val_loss_epoch": 0,
+    "val_acc": 0.751885775862069,
+    "val_acc_epoch": 0
+  },
+  "starred": false,
+  "deepfriendVersion": "0.1.0",
+  "git": null,
+  "record": true
+}

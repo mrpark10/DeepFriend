@@ -1,0 +1,37 @@
+{
+  "id": "20261026-194931-22f6",
+  "name": "nan",
+  "script": "nan.py",
+  "cwd": "/home/student/project",
+  "startedAt": "2026-10-26T19:49:31+09:00",
+  "endedAt": "2026-10-26T19:49:31+09:00",
+  "status": "finished",
+  "pid": 12345,
+  "framework": "pytorch",
+  "config": {
+    "batch_size": 32,
+    "optimizer": "SGD",
+    "lr": 500.0
+  },
+  "model": {
+    "params": 964
+  },
+  "numClasses": 4,
+  "final": {
+    "loss": 2.0462526312930588e+30,
+    "acc": 0.25646551724137934,
+    "val_acc": 0.267578125
+  },
+  "best": {
+    "loss": 2.0462526312930588e+30,
+    "loss_epoch": 0,
+    "acc": 0.25646551724137934,
+    "acc_epoch": 1,
+    "val_acc": 0.267578125,
+    "val_acc_epoch": 0
+  },
+  "starred": false,
+  "deepfriendVersion": "0.1.0",
+  "git": null,
+  "record": true
+}

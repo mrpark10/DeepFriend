@@ -1,0 +1,40 @@
+{
+  "id": "20261026-194933-6fd5",
+  "name": "oscillation",
+  "script": "oscillation.py",
+  "cwd": "/home/student/project",
+  "startedAt": "2026-10-26T19:49:33+09:00",
+  "endedAt": "2026-10-26T19:49:34+09:00",
+  "status": "finished",
+  "pid": 12345,
+  "framework": "pytorch",
+  "config": {
+    "batch_size": 2,
+    "optimizer": "SGD",
+    "lr": 0.1
+  },
+  "model": {
+    "params": 484
+  },
+  "numClasses": 4,
+  "final": {
+    "loss": 0.1313308096843208,
+    "acc": 0.9633333333333334,
+    "val_loss": 0.2877572998404503,
+    "val_acc": 0.9420572916666666
+  },
+  "best": {
+    "loss": 0.1313308096843208,
+    "loss_epoch": 1,
+    "acc": 0.9633333333333334,
+    "acc_epoch": 1,
+    "val_loss": 0.13617483526468277,
+    "val_loss_epoch": 0,
+    "val_acc": 0.9681285511363636,
+    "val_acc_epoch": 0
+  },
+  "starred": false,
+  "deepfriendVersion": "0.1.0",
+  "git": null,
+  "record": true
+}
