@@ -228,6 +228,29 @@ export function registerF3(ctx: vscode.ExtensionContext, deps: F3Deps): F3Api {
     }
   };
   ctx.subscriptions.push(watcher, watcher.onDidCreate(onRunError), watcher.onDidChange(onRunError));
+  // Safety net for missed file events (Linux inotify limits, network drives). Errors that already
+  // existed when VS Code started are remembered but not announced.
+  const seenMtime = new Map<string, number>();
+  let seeded = false;
+  const poll = async () => {
+    const files = await vscode.workspace.findFiles('**/.deepfriend/runs/*/error.json', '**/node_modules/**', 200);
+    for (const f of files) {
+      try {
+        const m = (await vscode.workspace.fs.stat(f)).mtime;
+        const prev = seenMtime.get(f.fsPath);
+        seenMtime.set(f.fsPath, m);
+        if (seeded && prev !== m) {
+          await onRunError(f);
+        }
+      } catch {
+        // deleted meanwhile
+      }
+    }
+    seeded = true;
+  };
+  void poll();
+  const pollTimer = setInterval(() => void poll(), 3000);
+  ctx.subscriptions.push({ dispose: () => clearInterval(pollTimer) });
 
   ctx.subscriptions.push(
     vscode.commands.registerCommand('deepfriend.goToErrorLine', async (frame: Frame) => {
