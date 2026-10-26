@@ -1,0 +1,15 @@
+.superpowers/
+.venv*/
+node_modules/
+extension/out/
+extension/dist/
+extension/python/
+extension/examples/
+extension/media/vendor/
+*.vsix
+.deepfriend/
+__pycache__/
+*.pyc
+.pytest_cache/
+.vscode-test/
+qa/screens/

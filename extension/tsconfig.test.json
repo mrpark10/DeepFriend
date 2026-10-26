@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "outDir": "out", "noEmit": false },
+  "include": ["src/test/suite", "src/test/suite/**/*.ts"],
+  "exclude": []
+}

@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "name": "deepfriend-repo",
+  "scripts": {
+    "test": "make test",
+    "test:int": "make test-int"
+  }
+}
