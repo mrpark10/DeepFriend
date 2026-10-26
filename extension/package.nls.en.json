@@ -33,5 +33,12 @@
   "cmd.openDoctor": "Open Training Doctor",
   "cmd.setApiKey": "Enter AI API Key",
   "view.model": "Model Structure",
-  "cmd.openModelView": "Open Model View"
+  "cmd.openModelView": "Open Model View",
+  "view.runs": "Experiments",
+  "cmd.openRun": "Show Charts",
+  "cmd.toggleStar": "Star",
+  "cmd.restoreRun": "Restore This Run's Code",
+  "cmd.deleteRun": "Delete Run",
+  "cmd.compareRuns": "Compare Runs",
+  "view.runs.welcome": "No experiments yet.\nAdd `import deepfriend; deepfriend.watch()` to your training script and run it — every run's settings and results are saved automatically."
 }

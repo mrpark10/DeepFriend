@@ -319,3 +319,18 @@ open("t.txt", "w").write(repr(time.perf_counter() - t))
     t0 = float((base / "t.txt").read_text())
     t1 = float((watched / "t.txt").read_text())
     assert t1 <= max(t0 * 1.6, t0 + 0.15), (t0, t1)
+
+
+def test_star_set_by_the_extension_survives_meta_rewrites(tmp_path):
+    project = tmp_path / "star"
+    run_script(project, """
+import json, os
+import deepfriend
+r = deepfriend.watch()
+path = os.path.join(r.dir, "meta.json")
+m = json.load(open(path)); m["starred"] = True
+json.dump(m, open(path, "w"))
+deepfriend.log(loss=1.0)
+deepfriend.log(epoch=1, val_loss=0.5)
+""")
+    assert meta(only_run(project))["starred"] is True

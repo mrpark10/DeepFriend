@@ -1,0 +1,8 @@
+.diff-table { border-collapse: collapse; width: 100%; max-width: 760px; margin-bottom: 12px; }
+.diff-table th, .diff-table td { text-align: left; padding: 4px 10px; border-bottom: 1px solid var(--vscode-widget-border, #8884); font-size: 0.95em; }
+.diff-table td:first-child { font-family: var(--vscode-editor-font-family); color: var(--vscode-descriptionForeground); }
+.diff-table tr.diff td { font-weight: 600; background: var(--vscode-diffEditor-insertedLineBackground, #9bb95522); }
+.diff-table tr.same td:not(:first-child) { color: var(--vscode-descriptionForeground); }
+#charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+.chart-title { font-size: 0.9em; color: var(--vscode-descriptionForeground); margin: 0 0 4px; }
+.uplot, .u-legend { color: var(--vscode-foreground); font-size: 0.85em; }

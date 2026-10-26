@@ -33,5 +33,12 @@
   "cmd.openDoctor": "학습 닥터 열기",
   "cmd.setApiKey": "AI API 키 입력",
   "view.model": "모델 구조",
-  "cmd.openModelView": "모델 그림 열기"
+  "cmd.openModelView": "모델 그림 열기",
+  "view.runs": "실험 기록",
+  "cmd.openRun": "그래프 보기",
+  "cmd.toggleStar": "별표",
+  "cmd.restoreRun": "이 실험의 코드로 되돌리기",
+  "cmd.deleteRun": "기록 지우기",
+  "cmd.compareRuns": "실험 비교",
+  "view.runs.welcome": "아직 실험 기록이 없어요.\n학습 코드에 `import deepfriend; deepfriend.watch()`를 넣고 실행하면 실험마다 설정과 결과가 자동으로 저장돼요."
 }

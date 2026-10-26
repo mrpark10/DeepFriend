@@ -157,6 +157,14 @@ class Run:
 
     def write_meta(self) -> None:
         try:
+            # the VS Code extension may have starred the run meanwhile: keep that choice
+            try:
+                with open(os.path.join(self.dir, "meta.json"), encoding="utf-8") as f:
+                    on_disk = json.load(f)
+                if isinstance(on_disk, dict) and isinstance(on_disk.get("starred"), bool):
+                    self.meta["starred"] = on_disk["starred"]
+            except Exception:
+                pass
             with self._lock:
                 data = json.dumps(self.meta, ensure_ascii=False, indent=2, allow_nan=False, default=str)
             _atomic_write(os.path.join(self.dir, "meta.json"), data)

@@ -7,6 +7,7 @@ import { registerF7 } from './f7';
 import { ModelView, registerF4 } from './f4';
 import { F3Api, registerF3 } from './f3';
 import { F2Api, registerF2 } from './f2';
+import { F5Api, registerF5 } from './f5';
 import { registerAi } from './ai';
 import * as fs from 'node:fs';
 import { setLanguage, t } from './i18n/i18n';
@@ -25,6 +26,7 @@ export interface DeepFriendApi {
   errors: F3Api;
   doctor: F2Api;
   modelView: ModelView;
+  runs: F5Api;
   status(): Status;
   python(): PythonInfo | null;
   ensureServer(): Promise<boolean>;
@@ -239,6 +241,8 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<DeepFriend
         .then((p) => p === yes && vscode.commands.executeCommand('deepfriend.installModule', 'deepfriend', true));
     },
   );
+  const runs = registerF5(ctx, doctor.watcher);
+
   ctx.subscriptions.push(
     vscode.workspace.onDidOpenTextDocument((d) => store.onOpen(d)),
     vscode.workspace.onDidChangeTextDocument((e) => {
@@ -271,6 +275,7 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<DeepFriend
     errors,
     doctor,
     modelView,
+    runs,
     status: () => status.get(),
     python: () => python,
     ensureServer,

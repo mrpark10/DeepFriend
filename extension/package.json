@@ -56,6 +56,35 @@
         "command": "deepfriend.openModelView",
         "title": "%cmd.openModelView%",
         "category": "DeepFriend"
+      },
+      {
+        "command": "deepfriend.openRun",
+        "title": "%cmd.openRun%",
+        "category": "DeepFriend"
+      },
+      {
+        "command": "deepfriend.toggleStar",
+        "title": "%cmd.toggleStar%",
+        "category": "DeepFriend",
+        "icon": "$(star-empty)"
+      },
+      {
+        "command": "deepfriend.restoreRun",
+        "title": "%cmd.restoreRun%",
+        "category": "DeepFriend",
+        "icon": "$(history)"
+      },
+      {
+        "command": "deepfriend.deleteRun",
+        "title": "%cmd.deleteRun%",
+        "category": "DeepFriend",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "deepfriend.compareRuns",
+        "title": "%cmd.compareRuns%",
+        "category": "DeepFriend",
+        "icon": "$(diff)"
       }
     ],
     "configuration": {
@@ -217,6 +246,10 @@
           "type": "webview",
           "id": "deepfriend.model",
           "name": "%view.model%"
+        },
+        {
+          "id": "deepfriend.runs",
+          "name": "%view.runs%"
         }
       ]
     },
@@ -225,9 +258,56 @@
         {
           "command": "deepfriend.openDoctor",
           "when": "true"
+        },
+        {
+          "command": "deepfriend.openRun",
+          "when": "false"
+        },
+        {
+          "command": "deepfriend.toggleStar",
+          "when": "false"
+        },
+        {
+          "command": "deepfriend.deleteRun",
+          "when": "false"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "deepfriend.toggleStar",
+          "when": "view == deepfriend.runs && viewItem =~ /^deepfriendRun/",
+          "group": "inline@1"
+        },
+        {
+          "command": "deepfriend.compareRuns",
+          "when": "view == deepfriend.runs && viewItem =~ /^deepfriendRun/",
+          "group": "1_run@1"
+        },
+        {
+          "command": "deepfriend.restoreRun",
+          "when": "view == deepfriend.runs && viewItem =~ /^deepfriendRun/",
+          "group": "1_run@2"
+        },
+        {
+          "command": "deepfriend.deleteRun",
+          "when": "view == deepfriend.runs && viewItem =~ /^deepfriendRun/",
+          "group": "9_delete@1"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "deepfriend.compareRuns",
+          "when": "view == deepfriend.runs",
+          "group": "navigation"
         }
       ]
-    }
+    },
+    "viewsWelcome": [
+      {
+        "view": "deepfriend.runs",
+        "contents": "%view.runs.welcome%"
+      }
+    ]
   },
   "scripts": {
     "copy-assets": "node scripts/copy-assets.mjs",
