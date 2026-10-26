@@ -234,7 +234,9 @@ AI에 보내는 것은 에러 메시지 + 관련 코드 최대 10줄 또는 진�
 
 ## 8. 배포·운영
 
-- **GitHub 저장소** `mrpark10/DeepFriend`(공개): 코드, Issues(문의·오류 신고 창구), 문서, 릴리스.
+- **GitHub 저장소** `mrpark10/DeepFriend`: 개발 중에는 **비공개**, 정식 출시 직전에 공개로 전환(사용자 결정). 공개 후 Issues가 문의·오류 신고 창구가 되므로, 공개 전환은 출시 체크리스트 항목으로 둔다.
+- **게시자 ID:** `mrpark10` → 확장 ID `mrpark10.deepfriend` (사용자 결정). Open VSX 네임스페이스도 `mrpark10`.
+- **문의 이메일:** sk92977852@gmail.com (사용자 결정) — 개인정보처리방침·마켓플레이스·README에 표기.
 - **릴리스 자동화:** 태그 푸시 → CI 통과 → VS Code Marketplace(`vsce`), Open VSX(`ovsx`), PyPI(GitHub Trusted Publishing — 토큰 저장 불필요) 동시 게시.
 - **게시자 계정 (사용자가 직접):** VS Code Marketplace 게시자 생성 + 토큰, Open VSX(Eclipse 계정·게시 동의서) 토큰, PyPI 계정 + Trusted Publisher 등록. Claude가 화면별 안내 문서를 만들고, 토큰은 사용자가 GitHub Secrets에 넣는다.
 - **마켓플레이스 등록 정보:** 아이콘, 한·영 설명, 기능별 스크린샷/GIF, 키워드(pytorch, tensorflow, keras, deep learning, 한국어, 딥러닝, 교육 등), 카테고리(Machine Learning, Education, Linters, Visualization). 시연 영상은 GIF로 대체 가능한지 확인하고, 불가하면 사용자에게 녹화를 요청.
@@ -246,5 +248,4 @@ AI에 보내는 것은 에러 메시지 + 관련 코드 최대 10줄 또는 진�
 - 진단 규칙의 정확한 임계값(예제로 조정), 차트 라이브러리 선택(동봉 가능하고 가벼운 것), 웹뷰 디자인 세부, 파일 구조 세부, 테스트 데이터 생성 방식, 문구 다듬기.
 
 ## 10. 열린 질문
-- 문의 이메일: GitHub Issues 외에 공개할 이메일 주소(개인정보처리방침·마켓플레이스 표기용).
 - F6 PyTorch 변환기의 OS 지원 범위 — 구현 시작 시 재확인(명세의 열린 질문 그대로).
