@@ -18,11 +18,11 @@ suite('examples & onboarding', () => {
     }
   });
 
-  test('the walkthrough is contributed with five steps', () => {
+  test('the walkthrough is contributed with four steps', () => {
     const ext = vscode.extensions.getExtension('mrpark10.deepfriend')!;
     const wt = ext.packageJSON.contributes.walkthroughs[0];
     assert.strictEqual(wt.id, 'deepfriend.start');
-    assert.strictEqual(wt.steps.length, 5);
+    assert.strictEqual(wt.steps.length, 4);
     for (const s of wt.steps) {
       assert.ok(fs.existsSync(path.join(ext.extensionPath, s.media.markdown)), s.media.markdown);
     }

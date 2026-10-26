@@ -118,11 +118,6 @@
         "icon": "$(diff)"
       },
       {
-        "command": "deepfriend.exportToApp",
-        "title": "%cmd.exportToApp%",
-        "category": "DeepFriend"
-      },
-      {
         "command": "deepfriend.openExample",
         "title": "%cmd.openExample%",
         "category": "DeepFriend"
@@ -386,14 +381,6 @@
             "media": {
               "markdown": "walkthrough/4-runs.md"
             }
-          },
-          {
-            "id": "export",
-            "title": "%wt.export.title%",
-            "description": "%wt.export.description%",
-            "media": {
-              "markdown": "walkthrough/5-export.md"
-            }
           }
         ]
       }
@@ -405,7 +392,7 @@
     "watch": "node esbuild.mjs --watch",
     "typecheck": "tsc -p . --noEmit",
     "test:unit": "vitest run",
-    "pretest:int": "npm run build && tsc -p tsconfig.test.json",
+    "pretest:int": "node -e \"require('fs').rmSync('out',{recursive:true,force:true})\" && npm run build && tsc -p tsconfig.test.json",
     "test:int": "vscode-test",
     "package": "npm run build && vsce package --no-dependencies",
     "vscode:prepublish": "npm run build"

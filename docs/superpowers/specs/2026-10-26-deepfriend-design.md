@@ -19,7 +19,7 @@ DeepFriend는 VS Code에서 PyTorch·TensorFlow(Keras) 코드를 쓰는 입문~�
 ## 2. 목표 / 비목표 / 반목표
 
 **목표**
-- 명세의 F1~F7 일곱 기능 전부 정식 출시에 포함.
+- 명세의 F1~F5, F7 기능을 정식 출시에 포함 (F6 앱으로 내보내기는 사용자 결정으로 제외).
 - 명세의 비기능 요구사항(속도·가벼움·개인정보·오프라인·지원 환경·안정성·언어) 충족.
 - 명세의 정식 출시 체크리스트 전부 완료 후 VS Code Marketplace + Open VSX + PyPI 동시 배포.
 
@@ -170,13 +170,9 @@ DeepFriend/
 - 설정 "자동 기록 끄기"면 `watch()`는 그래프만 보여주고 디스크에 남기지 않음(학습 닥터용 임시 파일은 실행 끝나면 삭제).
 - 인터넷 사용 없음(명세).
 
-### F6. 앱으로 내보내기 (P2)
+### F6. 앱으로 내보내기 — 제거됨 (2026-10-26, 사용자 결정)
 
-- 명령 "DeepFriend: 앱으로 내보내기" → 단계별 선택: ① 모델 선택(Keras: `.keras`/`.h5` 파일 / PyTorch: 모델 클래스 + 가중치 `.pt/.pth` 파일, 또는 학습 코드 끝에 `deepfriend.export(model, example_input)` 한 줄) ② 입력 크기(F1 결과로 미리 채움).
-- 변환: Keras → TensorFlow 내장 TFLite 변환기. PyTorch → `litert-torch`(구 ai-edge-torch, 2026-10 기준 최신 공식 변환기 — 구현 시작할 때 다시 확인). 변환 도구가 없으면 "변환 도구 설치(약 N MB)" 동의 버튼 → 별도 가상환경(`.deepfriend/export-env`)에 설치해 사용자 환경을 더럽히지 않음 **[Claude 판단]**. 변환기가 지원하지 않는 OS(구현 시 확인, 예: Windows)에서는 그 사실을 알리고 Colab에서 바로 돌릴 수 있는 변환 노트북을 생성.
-- **자동 확인(명세):** 같은 무작위 입력을 원본·변환본에 넣어 최대 오차·코사인 유사도 비교, 기준 통과/실패를 결과 카드로.
-- **Flutter 예제(명세):** `deepfriend_export/<모델명>/`에 `model.tflite`, `flutter/lib/deepfriend_model.dart`(`tflite_flutter` 패키지로 로드·추론, 입력·출력 크기 자동 기입), `pubspec` 추가 내용, 사용법 README, 검증 리포트.
-- 결과는 오른쪽 알림 카드 + "폴더 열기".
+사용자가 "쓸모없는 부분"이라며 F6를 통째로 빼기로 결정했다. 관련 코드·명령·문구·안내 단계는 모두 삭제했다.
 
 ### F7. 개념 설명 호버 (P2)
 

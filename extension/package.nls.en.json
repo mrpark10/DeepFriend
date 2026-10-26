@@ -41,7 +41,6 @@
   "cmd.deleteRun": "Delete Run",
   "cmd.compareRuns": "Compare Runs",
   "view.runs.welcome": "No experiments yet.\nAdd `import deepfriend; deepfriend.watch()` to your training script and run it — every run's settings and results are saved automatically.",
-  "cmd.exportToApp": "Export to App",
   "cmd.openExample": "Open Example",
   "wt.title": "Get started with DeepFriend",
   "wt.description": "Catch shape errors before running PyTorch/TensorFlow code and learn why training is not working.",
@@ -52,7 +51,5 @@
   "wt.doctor.title": "Turn on the training doctor",
   "wt.doctor.description": "One line, `import deepfriend; deepfriend.watch()`, gives charts and diagnoses.\n[Open Training Doctor](command:deepfriend.openDoctor)",
   "wt.runs.title": "Compare experiments",
-  "wt.runs.description": "Every run is saved automatically; compare and restore.\n[Compare runs](command:deepfriend.compareRuns)",
-  "wt.export.title": "Export to an app",
-  "wt.export.description": "Create a mobile model and Flutter example code.\n[Export to App](command:deepfriend.exportToApp)"
+  "wt.runs.description": "Every run is saved automatically; compare and restore.\n[Compare runs](command:deepfriend.compareRuns)"
 }

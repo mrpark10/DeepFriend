@@ -8,7 +8,6 @@ import { ModelView, registerF4 } from './f4';
 import { F3Api, registerF3 } from './f3';
 import { F2Api, registerF2 } from './f2';
 import { F5Api, registerF5 } from './f5';
-import { F6Api, registerF6 } from './f6';
 import { registerAi } from './ai';
 import { registerOnboarding } from './onboarding';
 import * as fs from 'node:fs';
@@ -29,7 +28,6 @@ export interface DeepFriendApi {
   doctor: F2Api;
   modelView: ModelView;
   runs: F5Api;
-  exporter: F6Api;
   status(): Status;
   python(): PythonInfo | null;
   ensureServer(): Promise<boolean>;
@@ -245,13 +243,6 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<DeepFriend
     },
   );
   const runs = registerF5(ctx, doctor.watcher);
-  const exportLog = vscode.window.createOutputChannel('DeepFriend Export');
-  ctx.subscriptions.push(exportLog);
-  const exporter = registerF6(ctx, store, {
-    python: async () => ((await ensureServer()) || python ? python?.command ?? null : null),
-    bundledPath: bundled,
-    output: exportLog,
-  });
 
   ctx.subscriptions.push(
     vscode.workspace.onDidOpenTextDocument((d) => store.onOpen(d)),
@@ -287,7 +278,6 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<DeepFriend
     doctor,
     modelView,
     runs,
-    exporter,
     status: () => status.get(),
     python: () => python,
     ensureServer,
