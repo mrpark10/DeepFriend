@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { FRAMEWORK_IMPORT } from './frameworkImport';
 import type { Language } from './i18n/i18n';
 
 export type Level = 'beginner' | 'normal';
@@ -27,7 +28,7 @@ export const config = {
   },
 };
 
-export const FRAMEWORK_IMPORT = /^\s*(?:import|from)\s+(torch|tensorflow|keras|tf_keras)\b/m;
+export { FRAMEWORK_IMPORT };
 
 export function detectFramework(text: string): 'pytorch' | 'tensorflow' | null {
   const m = FRAMEWORK_IMPORT.exec(text);

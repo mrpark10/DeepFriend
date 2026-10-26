@@ -1,17 +1,21 @@
 import { spawn } from 'node:child_process';
 import * as vscode from 'vscode';
 import { config, detectFramework } from './config';
+import { AnalysisStore } from './f1/analysisStore';
+import { registerF1 } from './f1';
 import { setLanguage, t } from './i18n/i18n';
 import { findPython, PythonInfo } from './python/findPython';
 import { nodeFindDeps } from './python/nodeDeps';
 import { pythonExtensionInterpreter } from './python/pythonExtension';
 import { openIssue } from './report';
 import { AnalysisClient, ProcessLike, Status } from './server/client';
+import type { AnalysisResult } from './server/types';
 import { StatusBar } from './status';
 import { applyTerminalEnv } from './terminalEnv';
 
 export interface DeepFriendApi {
   client: AnalysisClient;
+  store: AnalysisStore;
   status(): Status;
   python(): PythonInfo | null;
   ensureServer(): Promise<boolean>;
@@ -175,10 +179,53 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<DeepFriend
     }),
   );
 
+  // ---- F1: shape analysis ----
+  let inflight = 0;
+  const store = new AnalysisStore(async (uri, text) => {
+    if (!(await ensureServer())) {
+      return null;
+    }
+    inflight++;
+    status.set('busy');
+    try {
+      return await client.request<AnalysisResult | null>('analyze', { uri, text, runtime: config.runtimeCheck() }, 60_000);
+    } finally {
+      inflight--;
+      if (inflight === 0 && client.status !== 'error') {
+        status.set(client.status === 'busy' ? 'ready' : client.status);
+      }
+    }
+  });
+  const f1 = registerF1(ctx, store);
+  ctx.subscriptions.push(
+    vscode.workspace.onDidOpenTextDocument((d) => store.onOpen(d)),
+    vscode.workspace.onDidChangeTextDocument((e) => {
+      if (e.contentChanges.length) {
+        store.onChange(e.document);
+      }
+    }),
+    vscode.workspace.onDidSaveTextDocument((d) => store.onSave(d)),
+    vscode.workspace.onDidCloseTextDocument((d) => store.onClose(d)),
+    vscode.workspace.onDidChangeConfiguration((e) => {
+      if (e.affectsConfiguration('deepfriend.language') || e.affectsConfiguration('deepfriend.shapeHints')) {
+        f1.refresh();
+      }
+      if (e.affectsConfiguration('deepfriend.runtimeCheck')) {
+        for (const d of vscode.workspace.textDocuments) {
+          store.onSave(d);
+        }
+      }
+    }),
+  );
+  for (const d of vscode.workspace.textDocuments) {
+    store.onOpen(d);
+  }
+
   updateFramework(vscode.window.activeTextEditor);
 
   return {
     client,
+    store,
     status: () => status.get(),
     python: () => python,
     ensureServer,
