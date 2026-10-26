@@ -23,10 +23,15 @@ jobs:
           npx vsce package --no-dependencies -o deepfriend.vsix
       - name: Publish to VS Code Marketplace
         working-directory: extension
-        run: npx vsce publish --packagePath deepfriend.vsix -p "${{ secrets.VSCE_PAT }}"
+        run: npx vsce publish --packagePath deepfriend.vsix --skip-duplicate -p "${{ secrets.VSCE_PAT }}"
       - name: Publish to Open VSX
         working-directory: extension
-        run: npx ovsx publish deepfriend.vsix -p "${{ secrets.OVSX_PAT }}"
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        run: |
+          if [ -z "$OVSX_PAT" ]; then echo "OVSX_PAT not set; skipping Open VSX"; exit 0; fi
+          npx ovsx create-namespace mrpark10 -p "$OVSX_PAT" || echo "namespace already exists"
+          npx ovsx publish deepfriend.vsix --skip-duplicate -p "$OVSX_PAT"
       - uses: softprops/action-gh-release@v2
         with:
           files: extension/deepfriend.vsix
@@ -50,3 +55,4 @@ jobs:
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: python/dist
+          skip-existing: true
