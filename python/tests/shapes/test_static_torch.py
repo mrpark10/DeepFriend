@@ -129,7 +129,7 @@ class VGGish(nn.Module):
     assert h[ln(src, "self.classifier =")] == "(8, 10)"
     assert h[ln(src, "return self.classifier")] == "(8, 10)"
     assert [b["name"] for b in m["blocks"]][:3] == ["features.0", "features.1", "features.2"]
-    assert m["blocks"][-1] == {"name": "classifier.1", "kind": "Linear", "line": ln(src, "self.classifier ="), "outShape": "(8, 10)", "params": 32 * 64 * 10 + 10, "error": False}
+    assert {k: v for k, v in m["blocks"][-1].items() if k != "_hintLine"} == {"name": "classifier.1", "kind": "Linear", "line": ln(src, "self.classifier ="), "outShape": "(8, 10)", "params": 32 * 64 * 10 + 10, "error": False}
 
 
 def test_functional_and_view_variants():
@@ -447,7 +447,7 @@ class M(nn.Module):
     assert m["needsInput"] is True
     assert m["suggestedInput"] == "(B, 1, 28, 28)"
     assert m["hints"] == []
-    assert m["blocks"] == [{"name": "fc", "kind": "Linear", "line": ln(src, "self.fc ="), "outShape": "?", "params": 7850, "error": False}]
+    assert [{k: v for k, v in b.items() if k != "_hintLine"} for b in m["blocks"]] == [{"name": "fc", "kind": "Linear", "line": ln(src, "self.fc ="), "outShape": "?", "params": 7850, "error": False}]
 
 
 LENET = HEADER + """

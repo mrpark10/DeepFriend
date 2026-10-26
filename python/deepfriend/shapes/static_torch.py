@@ -137,6 +137,7 @@ class Recorder:
             "outShape": fmt_shape(shape),
             "params": param_count(layer),
             "error": error,
+            "_hintLine": layer.end_line,
         })
         self.block_outputs.append(shape)
 
@@ -353,7 +354,7 @@ class Analyzer:
             name = prefix + attr
             if isinstance(m, Layer):
                 for child_name, leaf in _leaves(m, name):
-                    blocks.append({"name": child_name, "kind": leaf.name, "line": leaf.line, "outShape": "?", "params": param_count(leaf), "error": False})
+                    blocks.append({"name": child_name, "kind": leaf.name, "line": leaf.line, "outShape": "?", "params": param_count(leaf), "error": False, "_hintLine": leaf.end_line})
             elif isinstance(m, UserRef) and m.ctx is not None:
                 blocks.extend(self.definition_blocks(m.ctx, name + "."))
         return blocks
