@@ -17,6 +17,7 @@ import time
 from typing import Any, Dict, List, Optional
 
 from .. import __version__
+from ..procutil import no_window_kwargs
 
 FLUSH_SECONDS = 0.5
 
@@ -61,7 +62,7 @@ def main_script() -> Optional[str]:
 
 def _git_hash(root: str) -> Optional[str]:
     try:
-        p = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, capture_output=True, text=True, timeout=1)
+        p = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, capture_output=True, text=True, timeout=1, **no_window_kwargs())
         if p.returncode == 0:
             return p.stdout.strip() or None
     except Exception:

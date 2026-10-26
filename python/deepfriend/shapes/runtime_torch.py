@@ -22,6 +22,8 @@ import sys
 import threading
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
+from deepfriend.procutil import no_window_kwargs  # noqa: E402
+
 PKG_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
@@ -48,6 +50,7 @@ class Worker:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.DEVNULL,
                 env=env,
+                **no_window_kwargs(),
             )
         except OSError:
             self.proc = None
