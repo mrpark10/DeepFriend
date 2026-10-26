@@ -23,3 +23,13 @@ const vendor = join(ext, 'media', 'vendor');
 mkdirSync(vendor, { recursive: true });
 cpSync(join(ext, 'node_modules', 'uplot', 'dist', 'uPlot.iife.min.js'), join(vendor, 'uPlot.iife.min.js'));
 cpSync(join(ext, 'node_modules', 'uplot', 'dist', 'uPlot.min.css'), join(vendor, 'uPlot.min.css'));
+
+// Marketplace README/CHANGELOG: copied from the repository root with absolute image URLs.
+import { readFileSync, writeFileSync } from 'node:fs';
+const RAW = 'https://github.com/mrpark10/DeepFriend/raw/HEAD/';
+const BLOB = 'https://github.com/mrpark10/DeepFriend/blob/HEAD/';
+const readme = readFileSync(join(root, 'README.md'), 'utf8')
+  .replace(/\]\((docs\/images\/[^)]+)\)/g, (_m, p) => `](${RAW}${p})`)
+  .replace(/\]\(((?:docs\/|README\.en)[^)]+)\)/g, (_m, p) => `](${BLOB}${p})`);
+writeFileSync(join(ext, 'README.md'), readme);
+cpSync(join(root, 'CHANGELOG.md'), join(ext, 'CHANGELOG.md'));

@@ -16,3 +16,5 @@ qa/screens/
 extension/src/test/fixtures/workspace/.vscode/
 extension/src/test/fixtures/workspace/f*/
 extension/src/test/fixtures/workspace/.deepfriend/
+extension/README.md
+extension/CHANGELOG.md
