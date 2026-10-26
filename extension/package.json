@@ -51,6 +51,11 @@
         "command": "deepfriend.setApiKey",
         "title": "%cmd.setApiKey%",
         "category": "DeepFriend"
+      },
+      {
+        "command": "deepfriend.openModelView",
+        "title": "%cmd.openModelView%",
+        "category": "DeepFriend"
       }
     ],
     "configuration": {
@@ -190,6 +195,13 @@
           "title": "%view.doctorContainer%",
           "icon": "media/deepfriend.svg"
         }
+      ],
+      "activitybar": [
+        {
+          "id": "deepfriend",
+          "title": "DeepFriend",
+          "icon": "media/deepfriend.svg"
+        }
       ]
     },
     "views": {
@@ -198,6 +210,13 @@
           "type": "webview",
           "id": "deepfriend.doctor",
           "name": "%view.doctor%"
+        }
+      ],
+      "deepfriend": [
+        {
+          "type": "webview",
+          "id": "deepfriend.model",
+          "name": "%view.model%"
         }
       ]
     },

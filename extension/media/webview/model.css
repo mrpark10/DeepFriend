@@ -1,0 +1,22 @@
+body { padding: 10px; }
+.summary { margin-bottom: 10px; }
+.summary .big { font-size: 1.15em; font-weight: 600; }
+.flow { display: flex; flex-direction: column; align-items: stretch; }
+.block {
+  border: 1px solid var(--vscode-widget-border, #8886);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  background: var(--vscode-editorWidget-background, transparent);
+}
+.block:hover { border-color: var(--vscode-focusBorder); }
+.block.active { border-color: var(--vscode-focusBorder); box-shadow: 0 0 0 1px var(--vscode-focusBorder) inset; }
+.block.error { border-color: var(--vscode-editorError-foreground, #f14c4c); }
+.block.unknown .shape { color: var(--vscode-descriptionForeground); }
+.block .row { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.block .name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.block .kind { color: var(--vscode-descriptionForeground); font-size: 0.9em; }
+.block .shape { font-family: var(--vscode-editor-font-family); font-size: 0.9em; }
+.block .params { color: var(--vscode-descriptionForeground); font-size: 0.85em; }
+.arrow { text-align: center; color: var(--vscode-descriptionForeground); line-height: 1.1; font-size: 0.9em; }
+.input { font-family: var(--vscode-editor-font-family); font-size: 0.9em; padding: 4px 10px; border: 1px dashed var(--vscode-widget-border, #8886); border-radius: 6px; }

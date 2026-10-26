@@ -4,6 +4,7 @@ import { config, detectFramework } from './config';
 import { AnalysisStore } from './f1/analysisStore';
 import { registerF1 } from './f1';
 import { registerF7 } from './f7';
+import { ModelView, registerF4 } from './f4';
 import { F3Api, registerF3 } from './f3';
 import { F2Api, registerF2 } from './f2';
 import { registerAi } from './ai';
@@ -23,6 +24,7 @@ export interface DeepFriendApi {
   store: AnalysisStore;
   errors: F3Api;
   doctor: F2Api;
+  modelView: ModelView;
   status(): Status;
   python(): PythonInfo | null;
   ensureServer(): Promise<boolean>;
@@ -205,6 +207,7 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<DeepFriend
   });
   const f1 = registerF1(ctx, store);
   registerF7(ctx, store);
+  const modelView = registerF4(ctx, store);
   const ai = registerAi(ctx);
   const errors = registerF3(ctx, {
     pythonCommand: () => python?.command ?? null,
@@ -267,6 +270,7 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<DeepFriend
     store,
     errors,
     doctor,
+    modelView,
     status: () => status.get(),
     python: () => python,
     ensureServer,

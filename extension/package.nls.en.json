@@ -31,5 +31,7 @@
   "view.doctorContainer": "Training Doctor",
   "view.doctor": "Training Doctor",
   "cmd.openDoctor": "Open Training Doctor",
-  "cmd.setApiKey": "Enter AI API Key"
+  "cmd.setApiKey": "Enter AI API Key",
+  "view.model": "Model Structure",
+  "cmd.openModelView": "Open Model View"
 }

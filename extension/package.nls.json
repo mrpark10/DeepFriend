@@ -31,5 +31,7 @@
   "view.doctorContainer": "학습 닥터",
   "view.doctor": "학습 닥터",
   "cmd.openDoctor": "학습 닥터 열기",
-  "cmd.setApiKey": "AI API 키 입력"
+  "cmd.setApiKey": "AI API 키 입력",
+  "view.model": "모델 구조",
+  "cmd.openModelView": "모델 그림 열기"
 }
