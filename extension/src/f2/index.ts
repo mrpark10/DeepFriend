@@ -72,9 +72,9 @@ export class RunWatcher implements vscode.Disposable {
   refresh(dir: string): void {
     const before = this.store.get(dir);
     const prevLen = before ? before.series.train.length + before.series.epochs.length : -1;
-    const prevStatus = before?.meta.status;
+    const prevMeta = before ? JSON.stringify(before.meta) : '';
     const r = this.store.refresh(dir);
-    if (r && (r.series.train.length + r.series.epochs.length !== prevLen || r.meta.status !== prevStatus || !before)) {
+    if (r && (r.series.train.length + r.series.epochs.length !== prevLen || JSON.stringify(r.meta) !== prevMeta)) {
       this.emitter.fire(r);
     }
   }

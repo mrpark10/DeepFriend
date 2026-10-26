@@ -6,6 +6,8 @@ import { registerF1 } from './f1';
 import { registerF7 } from './f7';
 import { F3Api, registerF3 } from './f3';
 import { F2Api, registerF2 } from './f2';
+import { registerAi } from './ai';
+import * as fs from 'node:fs';
 import { setLanguage, t } from './i18n/i18n';
 import { findPython, PythonInfo } from './python/findPython';
 import { nodeFindDeps } from './python/nodeDeps';
@@ -203,11 +205,29 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<DeepFriend
   });
   const f1 = registerF1(ctx, store);
   registerF7(ctx, store);
-  const errors = registerF3(ctx, { pythonCommand: () => python?.command ?? null });
+  const ai = registerAi(ctx);
+  const errors = registerF3(ctx, {
+    pythonCommand: () => python?.command ?? null,
+    aiAvailable: () => ai.available(),
+    askAi: async (reported) => {
+      const f = reported.error.frames[reported.error.frames.length - 1];
+      let code = '';
+      try {
+        if (f && fs.existsSync(f.file)) {
+          const lines = fs.readFileSync(f.file, 'utf8').split('\n');
+          code = lines.slice(Math.max(0, f.line - 6), f.line + 4).join('\n');
+        }
+      } catch {
+        // unreadable file: ask without code
+      }
+      return ai.explainError(reported.error, code);
+    },
+  });
   const doctor = registerF2(
     ctx,
     {
       findArgument: async (text, kind) => ((await ensureServer()) ? client.request('findArgument', { text, kind }) : null),
+      polish: (f, text) => ai.polishDoctor(f.id, text),
     },
     (oldV) => {
       const yes = t('doctor.update.yes');

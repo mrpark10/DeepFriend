@@ -144,6 +144,13 @@ export const en: Record<StringKey, string> = {
   'doctor.samples.label': 'label: {label}',
   'doctor.update.python': 'The pip-installed deepfriend ({old}) is older than the bundled version ({new}). Update it?',
   'doctor.update.yes': 'Update',
+  'ai.consent.title': 'Send the text below to AI for an explanation? (destination: the AI chosen in settings)',
+  'ai.consent.once': 'Allow once',
+  'ai.consent.always': 'Always allow',
+  'ai.consent.never': 'Never',
+  'ai.key.pick': 'Which AI is this API key for?',
+  'ai.key.prompt': 'Enter the API key. It is stored only in VS Code secret storage, never in settings files. Leave empty to delete it.',
+  'ai.key.saved': 'API key saved.',
   'common.cancel': 'Cancel',
   'common.ok': 'OK',
 };

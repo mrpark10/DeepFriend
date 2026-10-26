@@ -143,6 +143,13 @@ export const ko = {
   'doctor.samples.label': '라벨: {label}',
   'doctor.update.python': 'pip로 설치된 deepfriend({old})가 확장에 들어 있는 버전({new})보다 오래됐어요. 업데이트할까요?',
   'doctor.update.yes': '업데이트',
+  'ai.consent.title': 'AI에게 아래 내용을 보내서 설명을 받을까요? (보내는 곳: 설정에서 고른 AI)',
+  'ai.consent.once': '이번만 허용',
+  'ai.consent.always': '항상 허용',
+  'ai.consent.never': '사용 안 함',
+  'ai.key.pick': '어떤 AI의 API 키를 입력할까요?',
+  'ai.key.prompt': 'API 키를 입력하세요. VS Code 보안 저장소에만 저장되고 설정 파일에는 남지 않아요. 비우면 삭제돼요.',
+  'ai.key.saved': 'API 키를 저장했어요.',
   'common.cancel': '취소',
   'common.ok': '확인',
 } as const;

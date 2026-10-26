@@ -20,6 +20,15 @@ function installRun(fixture: string, id: string, patch: Record<string, unknown> 
 }
 
 suite('F2 training doctor', () => {
+  test('rewriting only meta.json of an existing run refreshes the panel (regression)', async () => {
+    const a = await api();
+    const dir = installRun('healthy', '20261026-195900-ffff', { name: 'first-name' });
+    await waitFor(() => (a.doctor.view.lastMessage?.run?.title === 'first-name' ? true : undefined));
+    installRun('healthy', '20261026-195900-ffff', { name: 'renamed' });
+    await waitFor(() => (a.doctor.view.lastMessage?.run?.title === 'renamed' ? true : undefined));
+    assert.ok(dir);
+  });
+
   test('a NaN run shows the NaN card in Korean', async () => {
     const a = await api();
     installRun('nan', '20261026-200000-aaaa', { name: 'nan-run' });
