@@ -10,6 +10,7 @@ import { F2Api, registerF2 } from './f2';
 import { F5Api, registerF5 } from './f5';
 import { F6Api, registerF6 } from './f6';
 import { registerAi } from './ai';
+import { registerOnboarding } from './onboarding';
 import * as fs from 'node:fs';
 import { setLanguage, t } from './i18n/i18n';
 import { findPython, PythonInfo } from './python/findPython';
@@ -276,6 +277,7 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<DeepFriend
     store.onOpen(d);
   }
 
+  registerOnboarding(ctx);
   updateFramework(vscode.window.activeTextEditor);
 
   return {

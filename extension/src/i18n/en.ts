@@ -205,6 +205,12 @@ export const en: Record<StringKey, string> = {
   'export.openColab': 'Show notebook',
   'export.missing': 'The {pkg} package needed for conversion is missing.',
   'export.failed': 'Could not convert: {message}',
+  'example.pickTitle': 'Which example? (copied to DeepFriend-examples in your home folder)',
+  'example.01': 'Simplest model · shape hints · training doctor',
+  'example.02': 'Convolutions (CNN) · concept hovers',
+  'example.03': 'Keras model (needs TensorFlow)',
+  'example.04': 'Deliberate shape error · quick fix · error explanation',
+  'example.05': 'Training doctor diagnosing a NaN loss',
   'common.cancel': 'Cancel',
   'common.ok': 'OK',
 };

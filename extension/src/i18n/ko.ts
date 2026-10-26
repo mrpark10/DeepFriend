@@ -204,6 +204,12 @@ export const ko = {
   'export.openColab': '노트북 위치 열기',
   'export.missing': '변환에 필요한 {pkg} 패키지가 없어요.',
   'export.failed': '변환하지 못했어요: {message}',
+  'example.pickTitle': '어떤 예제를 열까요? (홈 폴더의 DeepFriend-examples에 복사해요)',
+  'example.01': '가장 간단한 모델 · 크기 표시 · 학습 닥터',
+  'example.02': '합성곱(CNN) · 개념 설명 호버',
+  'example.03': 'Keras 모델 (TensorFlow 필요)',
+  'example.04': '일부러 넣은 크기 에러 · 빠른 수정 · 한국어 에러 해설',
+  'example.05': '학습 닥터가 NaN을 진단하는 예제',
   'common.cancel': '취소',
   'common.ok': '확인',
 } as const;

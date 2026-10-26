@@ -41,5 +41,18 @@
   "cmd.deleteRun": "기록 지우기",
   "cmd.compareRuns": "실험 비교",
   "view.runs.welcome": "아직 실험 기록이 없어요.\n학습 코드에 `import deepfriend; deepfriend.watch()`를 넣고 실행하면 실험마다 설정과 결과가 자동으로 저장돼요.",
-  "cmd.exportToApp": "앱으로 내보내기"
+  "cmd.exportToApp": "앱으로 내보내기",
+  "cmd.openExample": "예제 열기",
+  "wt.title": "DeepFriend 시작하기",
+  "wt.description": "PyTorch·TensorFlow 코드를 돌리기 전에 크기 에러를 찾고, 학습이 왜 안 되는지 쉬운 말로 알아봐요.",
+  "wt.example.title": "예제 열기",
+  "wt.example.description": "인터넷 없이 돌아가는 예제로 바로 체험해 보세요.\n[예제 열기](command:deepfriend.openExample)",
+  "wt.shapes.title": "줄마다 데이터 크기 보기",
+  "wt.shapes.description": "모델 위에 `# df: input (...)` 한 줄을 적으면 레이어마다 크기가 보여요.",
+  "wt.doctor.title": "학습 닥터 켜기",
+  "wt.doctor.description": "`import deepfriend; deepfriend.watch()` 한 줄이면 그래프와 진단이 나와요.\n[학습 닥터 열기](command:deepfriend.openDoctor)",
+  "wt.runs.title": "실험 기록 비교하기",
+  "wt.runs.description": "실행할 때마다 자동으로 저장된 기록을 비교하고 되돌려요.\n[실험 비교](command:deepfriend.compareRuns)",
+  "wt.export.title": "앱으로 내보내기",
+  "wt.export.description": "모바일용 모델과 Flutter 예제 코드를 만들어요.\n[앱으로 내보내기](command:deepfriend.exportToApp)"
 }

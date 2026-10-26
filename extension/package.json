@@ -90,6 +90,11 @@
         "command": "deepfriend.exportToApp",
         "title": "%cmd.exportToApp%",
         "category": "DeepFriend"
+      },
+      {
+        "command": "deepfriend.openExample",
+        "title": "%cmd.openExample%",
+        "category": "DeepFriend"
       }
     ],
     "configuration": {
@@ -311,6 +316,55 @@
       {
         "view": "deepfriend.runs",
         "contents": "%view.runs.welcome%"
+      }
+    ],
+    "walkthroughs": [
+      {
+        "id": "deepfriend.start",
+        "title": "%wt.title%",
+        "description": "%wt.description%",
+        "steps": [
+          {
+            "id": "example",
+            "title": "%wt.example.title%",
+            "description": "%wt.example.description%",
+            "media": {
+              "markdown": "walkthrough/1-example.md"
+            }
+          },
+          {
+            "id": "shapes",
+            "title": "%wt.shapes.title%",
+            "description": "%wt.shapes.description%",
+            "media": {
+              "markdown": "walkthrough/2-shapes.md"
+            }
+          },
+          {
+            "id": "doctor",
+            "title": "%wt.doctor.title%",
+            "description": "%wt.doctor.description%",
+            "media": {
+              "markdown": "walkthrough/3-doctor.md"
+            }
+          },
+          {
+            "id": "runs",
+            "title": "%wt.runs.title%",
+            "description": "%wt.runs.description%",
+            "media": {
+              "markdown": "walkthrough/4-runs.md"
+            }
+          },
+          {
+            "id": "export",
+            "title": "%wt.export.title%",
+            "description": "%wt.export.description%",
+            "media": {
+              "markdown": "walkthrough/5-export.md"
+            }
+          }
+        ]
       }
     ]
   },
