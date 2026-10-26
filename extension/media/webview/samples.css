@@ -1,0 +1,3 @@
+.samples { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+.sample { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px; border: 1px solid var(--vscode-widget-border, #8884); border-radius: 6px; }
+.sample canvas { image-rendering: pixelated; max-width: 100%; }

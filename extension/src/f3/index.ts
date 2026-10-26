@@ -235,7 +235,7 @@ export function registerF3(ctx: vscode.ExtensionContext, deps: F3Deps): F3Api {
         void vscode.window.showWarningMessage(t('err.noLocation'));
       }
     }),
-    vscode.commands.registerCommand('deepfriend.installModule', async (pkg: string) => {
+    vscode.commands.registerCommand('deepfriend.installModule', async (pkg: string, upgrade?: boolean) => {
       const py = deps.pythonCommand();
       if (!py) {
         void vscode.window.showWarningMessage(t('err.noPython'));
@@ -249,7 +249,7 @@ export function registerF3(ctx: vscode.ExtensionContext, deps: F3Deps): F3Api {
         vscode.TaskScope.Workspace,
         t('err.installTask', { pkg }),
         'DeepFriend',
-        new vscode.ProcessExecution(py[0], [...py.slice(1), '-m', 'pip', 'install', pkg]),
+        new vscode.ProcessExecution(py[0], [...py.slice(1), '-m', 'pip', 'install', ...(upgrade ? ['-U'] : []), pkg]),
       );
       await vscode.tasks.executeTask(task);
     }),

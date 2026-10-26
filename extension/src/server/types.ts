@@ -92,5 +92,7 @@ export interface ArgLocation {
   endCol: number;
   value: number | null;
   insert: boolean;
+  name: 'lr' | 'learning_rate' | 'batch_size';
+  hasArgs?: boolean;
   defaultValue?: number;
 }

@@ -41,6 +41,11 @@
         "command": "deepfriend.reportIssue",
         "title": "%cmd.reportIssue%",
         "category": "DeepFriend"
+      },
+      {
+        "command": "deepfriend.openDoctor",
+        "title": "%cmd.openDoctor%",
+        "category": "DeepFriend"
       }
     ],
     "configuration": {
@@ -172,7 +177,33 @@
           }
         }
       }
-    ]
+    ],
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "deepfriendPanel",
+          "title": "%view.doctorContainer%",
+          "icon": "media/deepfriend.svg"
+        }
+      ]
+    },
+    "views": {
+      "deepfriendPanel": [
+        {
+          "type": "webview",
+          "id": "deepfriend.doctor",
+          "name": "%view.doctor%"
+        }
+      ]
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "deepfriend.openDoctor",
+          "when": "true"
+        }
+      ]
+    }
   },
   "scripts": {
     "copy-assets": "node scripts/copy-assets.mjs",

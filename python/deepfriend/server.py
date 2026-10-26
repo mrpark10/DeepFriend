@@ -45,6 +45,7 @@ class Server:
         self.register("initialize", self._initialize)
         self.register("shutdown", self._shutdown)
         self.register("echo", lambda params: params)
+        self.register("findArgument", self._find_argument)
         # analyze requests run on a worker thread; a newer request for the same
         # uri replaces an older one that has not started yet ("latest wins").
         self._pending: "OrderedDict[str, Tuple[Any, Dict[str, Any]]]" = OrderedDict()
@@ -110,6 +111,11 @@ class Server:
                 self.respond(msg_id, error={"message": "%s: %s" % (type(e).__name__, e), "trace": traceback.format_exc()})
                 continue
             self.respond(msg_id, result)
+
+    def _find_argument(self, params: Dict[str, Any]) -> Any:
+        from .findargs import find_argument
+
+        return find_argument(str(params.get("text", "")), str(params.get("kind", "")))
 
     def _initialize(self, _params: Dict[str, Any]) -> Dict[str, Any]:
         return {

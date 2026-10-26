@@ -5,6 +5,7 @@ import { AnalysisStore } from './f1/analysisStore';
 import { registerF1 } from './f1';
 import { registerF7 } from './f7';
 import { F3Api, registerF3 } from './f3';
+import { F2Api, registerF2 } from './f2';
 import { setLanguage, t } from './i18n/i18n';
 import { findPython, PythonInfo } from './python/findPython';
 import { nodeFindDeps } from './python/nodeDeps';
@@ -19,6 +20,7 @@ export interface DeepFriendApi {
   client: AnalysisClient;
   store: AnalysisStore;
   errors: F3Api;
+  doctor: F2Api;
   status(): Status;
   python(): PythonInfo | null;
   ensureServer(): Promise<boolean>;
@@ -202,6 +204,18 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<DeepFriend
   const f1 = registerF1(ctx, store);
   registerF7(ctx, store);
   const errors = registerF3(ctx, { pythonCommand: () => python?.command ?? null });
+  const doctor = registerF2(
+    ctx,
+    {
+      findArgument: async (text, kind) => ((await ensureServer()) ? client.request('findArgument', { text, kind }) : null),
+    },
+    (oldV) => {
+      const yes = t('doctor.update.yes');
+      void vscode.window
+        .showInformationMessage(t('doctor.update.python', { old: oldV, new: String(ctx.extension.packageJSON.version) }), yes)
+        .then((p) => p === yes && vscode.commands.executeCommand('deepfriend.installModule', 'deepfriend', true));
+    },
+  );
   ctx.subscriptions.push(
     vscode.workspace.onDidOpenTextDocument((d) => store.onOpen(d)),
     vscode.workspace.onDidChangeTextDocument((e) => {
@@ -232,6 +246,7 @@ export async function activate(ctx: vscode.ExtensionContext): Promise<DeepFriend
     client,
     store,
     errors,
+    doctor,
     status: () => status.get(),
     python: () => python,
     ensureServer,

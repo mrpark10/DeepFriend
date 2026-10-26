@@ -27,5 +27,8 @@
   "cfg.runtimeCheck": "If PyTorch is installed, double-check shapes with fake 'meta' tensors that compute sizes only. Your training script is never run.",
   "cfg.pythonPath": "Path of the Python executable DeepFriend should use. Leave empty to detect automatically.",
   "cfg.errorReporting": "Show a 'Report on GitHub' button when DeepFriend itself fails. Nothing is sent automatically; you review and submit it yourself.",
-  "task.description": "DeepFriend task kind"
+  "task.description": "DeepFriend task kind",
+  "view.doctorContainer": "Training Doctor",
+  "view.doctor": "Training Doctor",
+  "cmd.openDoctor": "Open Training Doctor"
 }
