@@ -67,6 +67,7 @@ class Layer:
     arg_ranges: Dict[str, Range] = field(default_factory=dict)
     children: Optional[List["Layer"]] = None
     child_names: Optional[List[str]] = None  # submodule names ("0", "1" or OrderedDict keys)
+    literal_args: frozenset = frozenset()  # params written with literals only (safe to quick-fix)
 
 
 # ---- names ----------------------------------------------------------------------
@@ -216,6 +217,28 @@ def _ordered_dict_items(call: ast.Call) -> Optional[Tuple[List[str], List[ast.AS
     return keys, nodes
 
 
+def _repeat_comp(node: ast.AST, consts: Dict[str, Any]) -> Optional[List[ast.AST]]:
+    """``[nn.Linear(d, d) for _ in range(3)]`` -> the element node three times."""
+    if not isinstance(node, ast.ListComp) or len(node.generators) != 1:
+        return None
+    gen = node.generators[0]
+    if gen.ifs or not isinstance(gen.target, ast.Name):
+        return None
+    it = gen.iter
+    if not (isinstance(it, ast.Call) and isinstance(it.func, ast.Name) and it.func.id == "range" and len(it.args) == 1):
+        return None
+    n = eval_const(it.args[0], consts)
+    if not is_int(n) or not 0 <= n <= 1024:
+        return None
+    if any(isinstance(x, ast.Name) and x.id == gen.target.id for x in ast.walk(node.elt)):
+        return None  # element depends on the loop variable
+    return [node.elt] * n
+
+
+def _is_literal(node: ast.AST) -> bool:
+    return not any(isinstance(n, (ast.Name, ast.Call, ast.Attribute)) for n in ast.walk(node))
+
+
 def parse_layer(call: ast.Call, consts: Dict[str, Any], aliases: Dict[str, str]) -> Optional[Layer]:
     name = nn_class_name(call.func, aliases)
     if name is None:
@@ -226,6 +249,10 @@ def parse_layer(call: ast.Call, consts: Dict[str, Any], aliases: Dict[str, str])
         keys: Optional[List[str]] = None
         if name == "ModuleList" and len(call.args) == 1 and isinstance(call.args[0], (ast.List, ast.Tuple)):
             elems = list(call.args[0].elts)
+        elif len(call.args) == 1 and (name == "ModuleList" or isinstance(call.args[0], ast.Starred)):
+            rep = _repeat_comp(call.args[0].value if isinstance(call.args[0], ast.Starred) else call.args[0], consts)
+            if rep is not None:
+                elems = rep
         od = _ordered_dict_items(call) if name == "Sequential" else None
         if od is not None:
             keys, elems = od
@@ -245,21 +272,26 @@ def parse_layer(call: ast.Call, consts: Dict[str, Any], aliases: Dict[str, str])
         return Layer("unknown", name, {}, line, col, end_line, end_col)
     params: Dict[str, Any] = {}
     ranges: Dict[str, Range] = {}
+    literal: set = set()
     names = [n for n, _ in sig]
     for i, arg in enumerate(call.args):
         if isinstance(arg, ast.Starred) or i >= len(names):
             return Layer("unknown", name, {}, line, col, end_line, end_col)
         params[names[i]] = eval_const(arg, consts)
         ranges[names[i]] = _range(arg)
+        if _is_literal(arg):
+            literal.add(names[i])
     for kw in call.keywords:
         if kw.arg is None:  # **kwargs
             return Layer("unknown", name, {}, line, col, end_line, end_col)
         params[kw.arg] = eval_const(kw.value, consts)
         ranges[kw.arg] = _range(kw.value)
+        if _is_literal(kw.value):
+            literal.add(kw.arg)
     for n, default in sig:
         if n not in params:
             params[n] = None if default is _NO_DEFAULT else default
-    return Layer(name, name, params, line, col, end_line, end_col, ranges)
+    return Layer(name, name, params, line, col, end_line, end_col, ranges, literal_args=frozenset(literal))
 
 
 # ---- inference ---------------------------------------------------------------------

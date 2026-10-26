@@ -5,7 +5,10 @@ PY39=.venv39/bin/python
 
 test: test-py test-ext
 
-test-py:
+lint-py:
+	cd python && ../.venv/bin/ruff check .
+
+test-py: lint-py
 	cd python && ../$(PY) -m pytest -q
 	cd python && ../$(PY39) -m pytest -q
 
