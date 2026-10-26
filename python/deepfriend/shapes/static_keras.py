@@ -295,7 +295,7 @@ class _Scope:
     def _input_shape(self, call: ast.Call) -> Shape:
         shape: Any = None
         batch = None
-        for i, a in enumerate(call.args[:1]):
+        for a in call.args[:1]:
             shape = eval_const(a, self.consts)
         for k in call.keywords:
             if k.arg in ("shape", "input_shape"):
