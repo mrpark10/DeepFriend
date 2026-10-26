@@ -1,0 +1,4 @@
+  File "/home/student/project/train.py", line 1
+    x = (1,
+        ^
+SyntaxError: '(' was never closed

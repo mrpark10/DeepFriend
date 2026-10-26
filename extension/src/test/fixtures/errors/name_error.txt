@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/student/project/train.py", line 1, in <module>
+    print(modle)
+          ^^^^^
+NameError: name 'modle' is not defined

@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "C:\Users\박준호\딥러닝 과제\train.py", line 12, in <module>
+    out = model(x)
+  File "C:\Users\박준호\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+RuntimeError: mat1 and mat2 shapes cannot be multiplied (64x3136 and 10000x10)

@@ -1,0 +1,11 @@
+  F.mse_loss(torch.zeros(4, 3), torch.zeros(4, 5))
+Traceback (most recent call last):
+  File "/home/student/project/train.py", line 4, in <module>
+    F.mse_loss(torch.zeros(4, 3), torch.zeros(4, 5))
+  File "/home/student/.venv/lib/python3.12/site-packages/torch/nn/functional.py", line 4320, in mse_loss
+    expanded_input, expanded_target = torch.broadcast_tensors(input, target)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/student/.venv/lib/python3.12/site-packages/torch/functional.py", line 76, in broadcast_tensors
+    return _VF.broadcast_tensors(tensors)  # type: ignore[attr-defined]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: The size of tensor a (3) must match the size of tensor b (5) at non-singleton dimension 1

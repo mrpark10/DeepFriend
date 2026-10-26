@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/student/project/train.py", line 2, in <module>
+    a[5]
+    ~^^^
+IndexError: list index out of range

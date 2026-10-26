@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/student/project/train.py", line 30, in <module>
+    model.fit(x_train, y_train, batch_size=512, epochs=5)
+tensorflow.python.framework.errors_impl.ResourceExhaustedError: Graph execution error:
+
+OOM when allocating tensor with shape[512,64,224,224] and type float on /job:localhost/replica:0/task:0/device:GPU:0 by allocator GPU_0_bfc

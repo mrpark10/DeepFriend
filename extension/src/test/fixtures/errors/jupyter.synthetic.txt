@@ -1,0 +1,7 @@
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mRuntimeError[0m                              Traceback (most recent call last)
+Cell [0;32mIn[3], line 5[0m
+[1;32m      3[0m model [38;5;241m=[39m Net()
+[0;32m----> 5[0m out [38;5;241m=[39m model(x)
+File [0;32m~/miniconda3/lib/python3.10/site-packages/torch/nn/modules/module.py:1501[0m, in [0;36mModule._call_impl[0;34m(self, *args, **kwargs)[0m
+[0;31mRuntimeError[0m: mat1 and mat2 shapes cannot be multiplied (1x10 and 20x5)

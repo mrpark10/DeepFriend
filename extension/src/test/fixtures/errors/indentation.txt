@@ -1,0 +1,4 @@
+  File "/home/student/project/train.py", line 2
+    return 1
+    ^^^^^^
+IndentationError: expected an indented block after function definition on line 1

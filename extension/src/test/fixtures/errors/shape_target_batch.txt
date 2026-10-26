@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/student/project/train.py", line 4, in <module>
+    F.cross_entropy(torch.zeros(32, 10), torch.zeros(64, dtype=torch.long))
+  File "/home/student/.venv/lib/python3.12/site-packages/torch/nn/functional.py", line 3561, in cross_entropy
+    return torch._C._nn.cross_entropy_loss(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Expected input batch_size (32) to match target batch_size (64).

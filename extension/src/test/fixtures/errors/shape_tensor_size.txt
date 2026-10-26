@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/student/project/train.py", line 6, in <module>
+    a + b
+    ~~^~~
+RuntimeError: The size of tensor a (3) must match the size of tensor b (4) at non-singleton dimension 1
