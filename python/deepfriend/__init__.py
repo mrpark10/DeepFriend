@@ -38,3 +38,15 @@ def keras_callback():
     from .recorder import keras_callback as _cb
 
     return _cb()
+
+
+def export(model, example_input=None, out_dir="deepfriend_export", name=None, lang="ko"):
+    """Convert a trained model to .tflite and write a Flutter example next to it.
+
+    PyTorch: ``deepfriend.export(model, torch.randn(1, 3, 224, 224))``
+    Keras:   ``deepfriend.export(model)``
+    Returns a dict with ``ok``, ``tflite``, ``flutterDir``, ``verify`` (or ``error``).
+    """
+    from .export.api import export_model
+
+    return export_model(model, example_input, out_dir=out_dir, name=name, lang=lang)

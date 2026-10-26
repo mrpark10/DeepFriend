@@ -40,5 +40,6 @@
   "cmd.restoreRun": "이 실험의 코드로 되돌리기",
   "cmd.deleteRun": "기록 지우기",
   "cmd.compareRuns": "실험 비교",
-  "view.runs.welcome": "아직 실험 기록이 없어요.\n학습 코드에 `import deepfriend; deepfriend.watch()`를 넣고 실행하면 실험마다 설정과 결과가 자동으로 저장돼요."
+  "view.runs.welcome": "아직 실험 기록이 없어요.\n학습 코드에 `import deepfriend; deepfriend.watch()`를 넣고 실행하면 실험마다 설정과 결과가 자동으로 저장돼요.",
+  "cmd.exportToApp": "앱으로 내보내기"
 }

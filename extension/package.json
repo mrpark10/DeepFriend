@@ -85,6 +85,11 @@
         "title": "%cmd.compareRuns%",
         "category": "DeepFriend",
         "icon": "$(diff)"
+      },
+      {
+        "command": "deepfriend.exportToApp",
+        "title": "%cmd.exportToApp%",
+        "category": "DeepFriend"
       }
     ],
     "configuration": {
