@@ -1,8 +1,5 @@
 import json
-import os
 import statistics
-import subprocess
-import sys
 import textwrap
 import time
 
@@ -193,25 +190,70 @@ def test_runtime_merge_marks_verified_end_to_end():
 
 # ---- server: latest wins ------------------------------------------------------------
 
-PKG_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+def test_latest_wins_cancels_older(monkeypatch):
+    """Deterministic: the first analyze blocks; the second is superseded by the third."""
+    import io
+    import threading
+
+    from deepfriend import server as srv
+    from deepfriend.shapes import analyze as an
+
+    started = threading.Event()
+    release = threading.Event()
+    calls = []
+
+    class SlowAnalyzer:
+        def analyze(self, uri, text, runtime):
+            calls.append(text)
+            if len(calls) == 1:
+                started.set()
+                release.wait(5)
+            return {"framework": None, "models": [], "syntaxError": None, "text": text}
+
+        def close(self):
+            pass
+
+    monkeypatch.setattr(an, "Analyzer", SlowAnalyzer)
+    out = io.BytesIO()
+    s = srv.Server(stdin=io.BytesIO(), stdout=out)
+    s.handle({"id": 1, "method": "analyze", "params": {"uri": "u", "text": "one"}})
+    assert started.wait(5)
+    s.handle({"id": 2, "method": "analyze", "params": {"uri": "u", "text": "two"}})
+    s.handle({"id": 3, "method": "analyze", "params": {"uri": "u", "text": "three"}})
+    release.set()
+    deadline = time.time() + 5
+    while time.time() < deadline:
+        msgs = [json.loads(l) for l in out.getvalue().decode().splitlines() if l.strip()]
+        if len(msgs) == 3:
+            break
+        time.sleep(0.02)
+    got = {m["id"]: m for m in msgs}
+    assert got[2]["cancelled"] is True and got[2]["result"] is None
+    assert got[1]["result"]["text"] == "one" and got[3]["result"]["text"] == "three"
+    assert calls == ["one", "three"]
 
 
-def test_latest_wins_cancels_older():
-    pytest.importorskip("torch")
-    env = dict(os.environ, PYTHONPATH=PKG_ROOT)
-    p = subprocess.Popen([sys.executable, "-u", "-m", "deepfriend.server"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, env=env)
-    try:
-        for i, text in enumerate([GOOD, GOOD + "\n", GOOD + "\n\n"]):
-            p.stdin.write((json.dumps({"id": i + 1, "method": "analyze", "params": {"uri": "u", "text": text, "runtime": True}}) + "\n").encode())
-        p.stdin.flush()
-        got = {}
-        while len(got) < 3:
-            msg = json.loads(p.stdout.readline())
-            got[msg["id"]] = msg
-        # whatever the timing, the middle request is superseded and the newest one is answered
-        assert got[2].get("cancelled") is True and got[2]["result"] is None
-        assert got[3]["result"]["models"]
-        assert got[1].get("cancelled") is True or got[1]["result"]["models"]
-    finally:
-        p.kill()
-        p.wait()
+def test_analyze_requests_for_different_files_are_all_answered(monkeypatch):
+    import io
+
+    from deepfriend import server as srv
+    from deepfriend.shapes import analyze as an
+
+    class Fast:
+        def analyze(self, uri, text, runtime):
+            return {"uri": uri}
+
+        def close(self):
+            pass
+
+    monkeypatch.setattr(an, "Analyzer", Fast)
+    out = io.BytesIO()
+    s = srv.Server(stdin=io.BytesIO(), stdout=out)
+    for i, uri in enumerate(["a", "b", "c"]):
+        s.handle({"id": i, "method": "analyze", "params": {"uri": uri, "text": ""}})
+    deadline = time.time() + 5
+    while time.time() < deadline and len(out.getvalue().splitlines()) < 3:
+        time.sleep(0.02)
+    msgs = [json.loads(l) for l in out.getvalue().decode().splitlines()]
+    assert sorted(m["result"]["uri"] for m in msgs) == ["a", "b", "c"]
