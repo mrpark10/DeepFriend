@@ -18,7 +18,9 @@ from .torch_layers import (
     collect_aliases,
     dotted,
     eval_const,
+    MULTI_OUTPUT,
     infer,
+    infer_multi,
     param_count,
     parse_layer,
     qualname,
@@ -142,13 +144,25 @@ class Recorder:
         self.block_outputs.append(shape)
 
 
+def _tensor_tree(v: Any) -> Optional[str]:
+    if isinstance(v, T):
+        return fmt_shape(v.shape)
+    if isinstance(v, Seq) and v.items:
+        parts = [_tensor_tree(x) for x in v.items]
+        if all(p is not None for p in parts):
+            return "(" + ", ".join(parts) + ")"  # type: ignore[arg-type]
+    return None
+
+
 def _value_str(v: Any) -> Optional[str]:
     if isinstance(v, T):
         return fmt_shape(v.shape)
     if isinstance(v, U):
         return "?"
-    if isinstance(v, Seq) and v.items and all(isinstance(x, T) for x in v.items):
-        return ", ".join(fmt_shape(x.shape) for x in v.items)
+    if isinstance(v, Seq) and v.items:
+        parts = [_tensor_tree(x) for x in v.items]
+        if all(p is not None for p in parts):
+            return ", ".join(parts)  # type: ignore[arg-type]
     return None
 
 
@@ -652,9 +666,53 @@ class Frame:
                     return Mod(base.ref.children[idx.value])  # type: ignore[index]
                 except IndexError:
                     return U("unknown")
+        if isinstance(base, T):
+            return self._index_tensor(base, idx_node, env, node)
         if isinstance(base, U):
             return base
         return U("unsupported_op:indexing")
+
+    def _index_tensor(self, base: "T", idx_node: ast.AST, env: Dict[str, Any], node: ast.AST) -> Any:
+        """Basic indexing: ints drop a dim, slices keep (and shorten) it, None adds 1, ... expands."""
+        items = list(idx_node.elts) if isinstance(idx_node, ast.Tuple) else [idx_node]
+        shape = list(base.shape)
+        n_real = sum(1 for it in items if not (isinstance(it, ast.Constant) and it.value in (None, Ellipsis)))
+        out: List[Any] = []
+        dim = 0
+        for it in items:
+            if isinstance(it, ast.Constant) and it.value is Ellipsis:
+                skip = len(shape) - n_real
+                out.extend(shape[dim : dim + skip])
+                dim += skip
+                continue
+            if isinstance(it, ast.Constant) and it.value is None:
+                out.append(1)
+                continue
+            if dim >= len(shape):
+                return U("dynamic")
+            size = shape[dim]
+            if isinstance(it, ast.Slice):
+                vals = [self.ev(b, env) if b is not None else None for b in (it.lower, it.upper, it.step)]
+                py = [None if v is None else (v.value if isinstance(v, I) and is_int(v.value) else "x") for v in vals]
+                if "x" in py:
+                    return U("dynamic")
+                if all(v is None for v in py):
+                    out.append(size)
+                elif is_int(size):
+                    out.append(len(range(*slice(*py).indices(size))))
+                else:
+                    return U("dynamic")
+                dim += 1
+                continue
+            v = self.ev(it, env)
+            if isinstance(v, I) and is_int(v.value):
+                if is_int(size) and not -size <= v.value < size:
+                    return U("dynamic")
+                dim += 1
+                continue
+            return U("unsupported_op:indexing")
+        out.extend(shape[dim:])
+        return T(tuple(out))
 
     def _binop(self, a: Any, b: Any, op: ast.operator, node: ast.AST) -> Any:
         if isinstance(a, I) and isinstance(b, I):
@@ -691,7 +749,7 @@ class Frame:
         args = dict(e.info)
         fix = None
         if layer is not None:
-            param = {"linear_in": "in_features", "conv_in": "in_channels", "bn_features": "num_features"}.get(e.code)
+            param = {"linear_in": "in_features", "conv_in": "in_channels", "bn_features": "num_features", "rnn_in": "input_size" if "input_size" in layer.params else "embed_dim"}.get(e.code)
             if param and param in layer.arg_ranges:
                 r = layer.arg_ranges[param]
                 if param in layer.literal_args:
@@ -766,6 +824,8 @@ class Frame:
                 return U("unsupported_op:" + ref.cls.name)
             return self.an.run_model(ref.ctx, args, self.rec, self.depth + 1, name + ".")
         layer: Layer = ref
+        if layer.kind in MULTI_OUTPUT:
+            return self._apply_multi(layer, args, kwargs, node, name)
         x = args[0] if args else kwargs.get("input", U("no_input"))
         if layer.kind == "Sequential":
             out = x
@@ -796,6 +856,26 @@ class Frame:
                 out, err = U("after_error"), True
         self.rec.record(layer.end_line, (layer.line, layer.col), out)
         self.rec.block(name, layer, out, err)
+        return out
+
+    def _apply_multi(self, layer: Layer, args: List[Any], kwargs: Dict[str, Any], node: ast.Call, name: str) -> Any:
+        inputs = list(args) or [kwargs.get(k) for k in ("input", "query", "key") if k in kwargs]
+        first = inputs[0] if inputs else U("no_input")
+        err = False
+        if isinstance(first, U):
+            out: Any = first
+        elif not all(isinstance(v, T) for v in inputs[:2] if v is not None) or not isinstance(first, T):
+            out = U("dynamic")
+        else:
+            try:
+                shapes = infer_multi(layer, [v.shape if isinstance(v, T) else None for v in inputs])
+                out = _to_value_tree(shapes) if shapes is not None else U(self._unknown_reason(layer))
+            except ShapeError as e:
+                self.report(node, e, layer)
+                out, err = U("after_error"), True
+        head = out.items[0] if isinstance(out, Seq) else out
+        self.rec.record(layer.end_line, (layer.line, layer.col), head)
+        self.rec.block(name, layer, head, err)
         return out
 
     def _unknown_reason(self, layer: Layer) -> str:
@@ -1012,6 +1092,12 @@ _SHAPE_KEEP = frozenset(
 )
 _VIEW_METHODS = frozenset("view reshape flatten squeeze unsqueeze permute transpose t mean sum".split())
 _TENSOR_LIKE_METHODS = frozenset("flatten reshape squeeze unsqueeze permute transpose swapaxes mean sum amax amin".split())
+
+
+def _to_value_tree(shapes: Any) -> Any:
+    if isinstance(shapes, tuple) and shapes and isinstance(shapes[0], tuple):
+        return Seq(tuple(_to_value_tree(x) for x in shapes))
+    return T(tuple(shapes))
 
 
 def _to_py(v: Any) -> Any:

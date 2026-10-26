@@ -25,10 +25,11 @@
     box.appendChild(wrap);
     if (!rows[0].length) return;
     const opts = {
-      width: Math.max(300, wrap.clientWidth || 360),
+      width: Math.max(260, Math.min(wrap.clientWidth || 360, document.body.clientWidth - 28)),
       height: 200,
       scales: { x: { time: false } },
-      axes: [{ stroke: fg, grid: { stroke: grid }, label: xLabel }, { stroke: fg, grid: { stroke: grid } }],
+      legend: { live: false },
+      axes: [{ stroke: fg, grid: { stroke: grid }, label: xLabel }, { stroke: fg, grid: { stroke: grid }, size: 56, values: (u, vals) => vals.map((v) => (Math.abs(v) >= 1e4 || (v !== 0 && Math.abs(v) < 1e-3) ? v.toExponential(0) : String(Number(v.toPrecision(3))))) }],
       series: [{ label: xLabel }, { label: 'A · ' + data.a.name, stroke: colA, width: 1.5, spanGaps: true }, { label: 'B · ' + data.b.name, stroke: colB, width: 1.5, spanGaps: true }],
     };
     new uPlot(opts, rows, wrap);

@@ -4,7 +4,26 @@
   "description": "%ext.description%",
   "version": "0.1.0",
   "publisher": "mrpark10",
+  "author": {
+    "name": "박준호 (Junho Park)",
+    "email": "sk92977852@gmail.com"
+  },
   "license": "MIT",
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#1e1b4b",
+    "theme": "dark"
+  },
+  "pricing": "Free",
+  "homepage": "https://github.com/mrpark10/DeepFriend#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mrpark10/DeepFriend"
+  },
+  "bugs": {
+    "url": "https://github.com/mrpark10/DeepFriend/issues",
+    "email": "sk92977852@gmail.com"
+  },
   "engines": {
     "vscode": "^1.93.0"
   },
@@ -13,6 +32,18 @@
     "Education",
     "Linters",
     "Visualization"
+  ],
+  "keywords": [
+    "pytorch",
+    "tensorflow",
+    "keras",
+    "deep learning",
+    "딥러닝",
+    "한국어",
+    "korean",
+    "education",
+    "tensor shape",
+    "machine learning"
   ],
   "main": "./dist/extension.js",
   "activationEvents": [
@@ -376,7 +407,8 @@
     "test:unit": "vitest run",
     "pretest:int": "npm run build && tsc -p tsconfig.test.json",
     "test:int": "vscode-test",
-    "package": "npm run build && vsce package --no-dependencies"
+    "package": "npm run build && vsce package --no-dependencies",
+    "vscode:prepublish": "npm run build"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",

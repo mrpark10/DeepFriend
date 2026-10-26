@@ -21,20 +21,28 @@
     return v || fallback;
   }
 
+  // Short axis labels: 2e+30 instead of 2,000,000,…; 0.001 stays readable.
+  function fmt(v) {
+    if (v === null || v === undefined || !isFinite(v)) return '';
+    const a = Math.abs(v);
+    if (a !== 0 && (a >= 1e4 || a < 1e-3)) return v.toExponential(0);
+    return String(Number(v.toPrecision(3)));
+  }
+
   function makePlot(container, title, x, series, labels) {
-    const width = Math.max(260, container.clientWidth || 400);
+    const width = Math.max(220, Math.min(container.clientWidth || 400, document.body.clientWidth - 28));
     const fg = cssVar('--vscode-foreground', '#ccc');
     const grid = cssVar('--vscode-editorWidget-border', '#8884');
     const colors = [cssVar('--vscode-charts-blue', '#3794ff'), cssVar('--vscode-charts-orange', '#d18616')];
     const opts = {
       width,
       height: 170,
-      legend: { show: true },
+      legend: { show: true, live: false },
       cursor: { drag: { x: false, y: false } },
       scales: { x: { time: false } },
       axes: [
         { stroke: fg, grid: { stroke: grid, width: 1 }, label: labels.step },
-        { stroke: fg, grid: { stroke: grid, width: 1 } },
+        { stroke: fg, grid: { stroke: grid, width: 1 }, size: 56, values: (u, vals) => vals.map(fmt) },
       ],
       series: [{ label: labels.step }].concat(
         series.map((s, i) => ({ label: s.label, stroke: colors[i % colors.length], width: i === 0 ? 1.5 : 2, spanGaps: true, points: { show: i > 0, size: 5 } })),

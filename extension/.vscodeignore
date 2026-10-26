@@ -9,3 +9,6 @@ esbuild.mjs
 vitest.config.ts
 **/*.map
 **/__pycache__/**
+media/brand/**
+walkthrough/*.tmp
+.gitignore

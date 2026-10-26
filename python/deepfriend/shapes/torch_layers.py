@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
 
 from . import torch_formulas as F
-from .dims import Shape, is_int
+from .dims import Shape, ShapeError, is_int
 
 Range = Tuple[int, int, int, int]
 
@@ -40,7 +40,15 @@ SIGNATURES: Dict[str, List[Tuple[str, Any]]] = {
     "LayerNorm": [("normalized_shape", _NO_DEFAULT), ("eps", 1e-5), ("elementwise_affine", True), ("bias", True)],
     "Embedding": [("num_embeddings", _NO_DEFAULT), ("embedding_dim", _NO_DEFAULT), ("padding_idx", None)],
     "PReLU": [("num_parameters", 1), ("init", 0.25)],
+    "LSTM": [("input_size", _NO_DEFAULT), ("hidden_size", _NO_DEFAULT), ("num_layers", 1), ("bias", True), ("batch_first", False), ("dropout", 0.0), ("bidirectional", False), ("proj_size", 0)],
+    "GRU": [("input_size", _NO_DEFAULT), ("hidden_size", _NO_DEFAULT), ("num_layers", 1), ("bias", True), ("batch_first", False), ("dropout", 0.0), ("bidirectional", False)],
+    "RNN": [("input_size", _NO_DEFAULT), ("hidden_size", _NO_DEFAULT), ("num_layers", 1), ("nonlinearity", "tanh"), ("bias", True), ("batch_first", False), ("dropout", 0.0), ("bidirectional", False)],
+    "MultiheadAttention": [("embed_dim", _NO_DEFAULT), ("num_heads", _NO_DEFAULT), ("dropout", 0.0), ("bias", True), ("add_bias_kv", False), ("add_zero_attn", False), ("kdim", None), ("vdim", None), ("batch_first", False)],
 }
+
+# Layers whose call returns a tuple: shapes come from infer_multi().
+MULTI_OUTPUT = frozenset(["LSTM", "GRU", "RNN", "MultiheadAttention"])
+_GATES = {"LSTM": 4, "GRU": 3, "RNN": 1}
 
 # Layers that never change the shape and have no parameters.
 ACTIVATIONS = frozenset(
@@ -352,6 +360,48 @@ def infer(layer: Layer, in_shape: Shape) -> Shape:
     return None
 
 
+def infer_multi(layer: Layer, inputs: List[Shape]) -> Optional[Tuple[Any, ...]]:
+    """Output shapes of tuple-returning layers: RNNs -> (out, h) or (out, (h, c)); attention -> (out, weights)."""
+    k, p = layer.kind, layer.params
+    x = inputs[0] if inputs else None
+    if x is None:
+        return None
+    if k in _GATES:
+        inp, hid, layers, bf, bi = p["input_size"], p["hidden_size"], p["num_layers"], p["batch_first"], p["bidirectional"]
+        if not (is_int(inp) and is_int(hid) and is_int(layers)) or bf is None or bi is None or p.get("proj_size"):
+            return None
+        if len(x) not in (2, 3):
+            raise ShapeError("rank", layer=k, expected="2D/3D", actual=len(x))
+        if is_int(x[-1]) and x[-1] != inp:
+            raise ShapeError("rnn_in", expected=inp, actual=x[-1])
+        d = 2 if bi else 1
+        if len(x) == 2:
+            out = (x[0], d * hid)
+            h = (d * layers, hid)
+        else:
+            n, length = (x[0], x[1]) if bf else (x[1], x[0])
+            out = (n, length, d * hid) if bf else (length, n, d * hid)
+            h = (d * layers, n, hid)
+        return (out, (h, h)) if k == "LSTM" else (out, h)
+    if k == "MultiheadAttention":
+        e, heads, bf = p["embed_dim"], p["num_heads"], p["batch_first"]
+        if not (is_int(e) and is_int(heads)) or bf is None:
+            return None
+        if e % heads:
+            raise ShapeError("invalid_arg", layer=k, reason="heads", value=heads)
+        if len(x) not in (2, 3):
+            raise ShapeError("rank", layer=k, expected="2D/3D", actual=len(x))
+        if is_int(x[-1]) and x[-1] != e:
+            raise ShapeError("rnn_in", expected=e, actual=x[-1])
+        key = inputs[1] if len(inputs) > 1 and inputs[1] is not None else x
+        if len(x) == 2:
+            return (x, (x[0], key[0]))
+        n, length = (x[0], x[1]) if bf else (x[1], x[0])
+        s_len = key[1] if bf else key[0]
+        return (x, (n, length, s_len))
+    return None
+
+
 def _prod(v: Any) -> Optional[int]:
     vals = v if isinstance(v, tuple) else (v,)
     out = 1
@@ -411,4 +461,19 @@ def param_count(layer: Layer) -> Optional[int]:
     if k == "PReLU":
         n = p["num_parameters"]
         return n if is_int(n) else None
+    if k in _GATES:
+        inp, hid, layers, bias, bi = p["input_size"], p["hidden_size"], p["num_layers"], p["bias"], p["bidirectional"]
+        if not (is_int(inp) and is_int(hid) and is_int(layers)) or bias is None or bi is None or p.get("proj_size"):
+            return None
+        g, d = _GATES[k], (2 if bi else 1)
+        total = 0
+        for i in range(layers):
+            lin = inp if i == 0 else d * hid
+            total += d * (g * hid * lin + g * hid * hid + (2 * g * hid if bias else 0))
+        return total
+    if k == "MultiheadAttention":
+        e, bias = p["embed_dim"], p["bias"]
+        if not is_int(e) or bias is None or p.get("kdim") not in (None, e) or p.get("vdim") not in (None, e) or p.get("add_bias_kv"):
+            return None
+        return 4 * e * e + (4 * e if bias else 0)
     return None

@@ -18,7 +18,8 @@ export default defineConfig({
   files: 'out/test/suite/**/*.test.js',
   version: process.env.DEEPFRIEND_TEST_VSCODE || '1.93.0',
   workspaceFolder: workspace,
-  extensionDevelopmentPath: [here, join(here, 'src', 'test', 'fixtures', 'nb-ext')],
+  // DEEPFRIEND_TEST_EXT_PATH lets the system test run the suite against an unpacked VSIX.
+  extensionDevelopmentPath: [process.env.DEEPFRIEND_TEST_EXT_PATH || here, join(here, 'src', 'test', 'fixtures', 'nb-ext')],
   launchArgs: ['--disable-extensions', '--disable-workspace-trust'],
   env: { DEEPFRIEND_TEST_PYTHON: python },
   mocha: { ui: 'tdd', timeout: 60000 },

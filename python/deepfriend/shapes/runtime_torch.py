@@ -157,6 +157,8 @@ SHAPE_ERROR_PATTERNS = [
     "expected input with shape",
     "does not match the length of the desired ordering",
     "expects each tensor to be equal size",
+    "must be equal to input_size",
+    "was expected to have embed_dim",
 ]
 
 

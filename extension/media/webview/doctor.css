@@ -1,5 +1,6 @@
 body { padding: 10px 14px; }
-.layout { display: grid; grid-template-columns: minmax(280px, 1.4fr) minmax(260px, 1fr); gap: 16px; align-items: start; }
+.layout { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.layout > div { min-width: 0; }
 @media (max-width: 720px) { .layout { grid-template-columns: 1fr; } }
 .head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin-bottom: 8px; }
 .head h1 { font-size: 1.1em; margin: 0; }

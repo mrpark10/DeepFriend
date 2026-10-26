@@ -44,4 +44,12 @@ function probe(cmd: string[]): Promise<{ version: string; executable: string } |
   });
 }
 
-export const nodeFindDeps: FindDeps = { platform: process.platform, which, probe };
+// DEEPFRIEND_DISABLE_PYTHON_DISCOVERY=1 simulates a computer without Python (used by the system tests;
+// on macOS VS Code re-reads the login shell PATH, so emptying PATH is not enough).
+const disabled = process.env.DEEPFRIEND_DISABLE_PYTHON_DISCOVERY === '1';
+
+export const nodeFindDeps: FindDeps = {
+  platform: process.platform,
+  which: (cmd) => (disabled ? Promise.resolve(null) : which(cmd)),
+  probe: (cmd) => (disabled ? Promise.resolve(null) : probe(cmd)),
+};

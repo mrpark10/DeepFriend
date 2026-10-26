@@ -6,10 +6,11 @@
     const cell = document.createElement('div');
     cell.className = 'sample';
     const canvas = document.createElement('canvas');
-    const scale = 4;
-    const [h, w, c] = item.shape.length === 3 ? item.shape : [1, item.shape[0], 1];
+    const isImage = item.shape.length === 3;
+    const [h, w, c] = isImage ? item.shape : [1, item.shape[0], 1];
+    const scale = Math.max(2, Math.floor((isImage ? 96 : 120) / Math.max(1, w)));
     canvas.width = w * scale;
-    canvas.height = Math.max(1, h) * scale * (item.shape.length === 3 ? 1 : 6);
+    canvas.height = isImage ? h * scale : 28;
     const ctx = canvas.getContext('2d');
     const rows = item.shape.length === 3 ? h : 1;
     const cellH = canvas.height / rows;
