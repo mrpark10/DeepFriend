@@ -14,11 +14,13 @@
 | 같은 통합 테스트, **패키징된 VSIX를 푼 내용물**로 실행 | 39 통과 |
 | 파이썬 없는 컴퓨터 시나리오 | 3 통과 |
 | torch 없는 Python 3.9로 F1·F7·시스템 테스트 | 12 통과 |
-| Windows·Linux·macOS (GitHub Actions) | CI 결과 참고 |
+| Windows·Linux·macOS (GitHub Actions) | 10개 작업 모두 통과 (python 3.9/3.12 × 3 OS, extension × 3 OS, .env 검사) |
+| **VS Code 마켓플레이스에서 설치한 0.1.0**으로 통합 테스트 | 39 통과 |
 
 ## 2. 시스템 테스트 (실제 설치·실행)
 
 - [x] VSIX 패키징: 60개 파일, 269 KB, 소스·테스트·map 미포함, 경고 0
+- [x] 2026-10-26 VS Code 마켓플레이스 공개 (https://marketplace.visualstudio.com/items?itemName=mrpark10.deepfriend), 빈 프로필에 마켓플레이스에서 설치 성공
 - [x] 실제 VS Code 1.135.0 빈 프로필에 VSIX 설치 → `mrpark10.deepfriend@0.1.0` 확인
 - [x] 통합 터미널(셸 통합)에서 난 파이썬 에러 → 해설 흐름 진입, 줄 번호 정확
 - [x] 분석기 프로세스가 멈추면 스스로 다시 켜짐
