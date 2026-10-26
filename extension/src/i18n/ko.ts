@@ -1,0 +1,31 @@
+// Korean is the default language and the source of truth for message keys.
+export const ko = {
+  'status.starting': 'DeepFriend: 시작하는 중',
+  'status.ready': 'DeepFriend: 준비됨',
+  'status.busy': 'DeepFriend: 분석 중',
+  'status.error': 'DeepFriend: 오류',
+  'status.noPython': 'DeepFriend: 파이썬 필요',
+  'status.tooltip': 'DeepFriend 상태를 보려면 누르세요',
+  'status.pick.python': '파이썬: {path} ({version})',
+  'status.pick.frameworks': 'PyTorch {torch} · TensorFlow {tensorflow}',
+  'status.pick.notInstalled': '설치 안 됨',
+  'status.pick.restart': '$(refresh) 분석기 다시 시작',
+  'status.pick.selectPython': '$(gear) 사용할 파이썬 고르기',
+  'status.pick.log': '$(output) DeepFriend 로그 보기',
+  'status.pick.report': '$(github) 오류 신고하기',
+  'python.notFound': '파이썬을 찾지 못했어요. 파이썬 3.9 이상을 설치하면 크기 표시와 모델 그림을 쓸 수 있어요. 에러 해설과 개념 설명은 지금도 쓸 수 있어요.',
+  'python.tooOld': '파이썬 {version}은 너무 오래됐어요. {min} 이상이 필요해요.',
+  'python.install': '파이썬 설치 방법 보기',
+  'python.choose': '파이썬 직접 고르기',
+  'python.chooseTitle': 'DeepFriend가 쓸 파이썬 실행 파일을 골라 주세요',
+  'server.crashedGiveUp': 'DeepFriend 분석기가 계속 멈춰서 잠시 꺼 두었어요. VS Code는 문제없이 쓸 수 있어요.',
+  'server.restart': '다시 시작',
+  'server.report': '오류 신고',
+  'terminal.envDescription': 'DeepFriend: 설치 없이 `import deepfriend`를 쓸 수 있게 해요',
+  'report.title': '[오류] ',
+  'report.bodyIntro': '무엇을 하다가 문제가 생겼는지 적어 주세요:',
+  'common.cancel': '취소',
+  'common.ok': '확인',
+} as const;
+
+export type StringKey = keyof typeof ko;

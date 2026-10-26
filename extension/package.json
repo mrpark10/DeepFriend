@@ -5,15 +5,161 @@
   "version": "0.1.0",
   "publisher": "mrpark10",
   "license": "MIT",
-  "engines": { "vscode": "^1.93.0" },
-  "categories": ["Machine Learning", "Education", "Linters", "Visualization"],
+  "engines": {
+    "vscode": "^1.93.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Education",
+    "Linters",
+    "Visualization"
+  ],
   "main": "./dist/extension.js",
   "activationEvents": [
     "onLanguage:python",
     "onNotebook:jupyter-notebook",
     "workspaceContains:.deepfriend"
   ],
-  "contributes": {},
+  "contributes": {
+    "commands": [
+      {
+        "command": "deepfriend.restartServer",
+        "title": "%cmd.restartServer%",
+        "category": "DeepFriend"
+      },
+      {
+        "command": "deepfriend.selectPython",
+        "title": "%cmd.selectPython%",
+        "category": "DeepFriend"
+      },
+      {
+        "command": "deepfriend.showStatus",
+        "title": "%cmd.showStatus%",
+        "category": "DeepFriend"
+      },
+      {
+        "command": "deepfriend.reportIssue",
+        "title": "%cmd.reportIssue%",
+        "category": "DeepFriend"
+      }
+    ],
+    "configuration": {
+      "title": "DeepFriend",
+      "properties": {
+        "deepfriend.language": {
+          "type": "string",
+          "enum": [
+            "ko",
+            "en"
+          ],
+          "enumDescriptions": [
+            "%cfg.language.ko%",
+            "%cfg.language.en%"
+          ],
+          "default": "ko",
+          "description": "%cfg.language%",
+          "order": 0
+        },
+        "deepfriend.level": {
+          "type": "string",
+          "enum": [
+            "beginner",
+            "normal"
+          ],
+          "enumDescriptions": [
+            "%cfg.level.beginner%",
+            "%cfg.level.normal%"
+          ],
+          "default": "beginner",
+          "description": "%cfg.level%",
+          "order": 1
+        },
+        "deepfriend.autoRecord": {
+          "type": "boolean",
+          "default": true,
+          "description": "%cfg.autoRecord%",
+          "order": 2
+        },
+        "deepfriend.ai.provider": {
+          "type": "string",
+          "enum": [
+            "off",
+            "vscode",
+            "anthropic",
+            "openai-compatible"
+          ],
+          "enumDescriptions": [
+            "%cfg.ai.provider.off%",
+            "%cfg.ai.provider.vscode%",
+            "%cfg.ai.provider.anthropic%",
+            "%cfg.ai.provider.openai%"
+          ],
+          "default": "vscode",
+          "description": "%cfg.ai.provider%",
+          "order": 3
+        },
+        "deepfriend.ai.consent": {
+          "type": "string",
+          "enum": [
+            "ask",
+            "always",
+            "never"
+          ],
+          "enumDescriptions": [
+            "%cfg.ai.consent.ask%",
+            "%cfg.ai.consent.always%",
+            "%cfg.ai.consent.never%"
+          ],
+          "default": "ask",
+          "description": "%cfg.ai.consent%",
+          "order": 4
+        },
+        "deepfriend.ai.anthropicModel": {
+          "type": "string",
+          "default": "claude-haiku-4-5",
+          "description": "%cfg.ai.anthropicModel%",
+          "order": 5
+        },
+        "deepfriend.ai.openaiBaseUrl": {
+          "type": "string",
+          "default": "https://api.openai.com/v1",
+          "description": "%cfg.ai.openaiBaseUrl%",
+          "order": 6
+        },
+        "deepfriend.ai.openaiModel": {
+          "type": "string",
+          "default": "gpt-4o-mini",
+          "description": "%cfg.ai.openaiModel%",
+          "order": 7
+        },
+        "deepfriend.shapeHints.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "%cfg.shapeHints%",
+          "order": 8
+        },
+        "deepfriend.runtimeCheck": {
+          "type": "boolean",
+          "default": true,
+          "description": "%cfg.runtimeCheck%",
+          "order": 9
+        },
+        "deepfriend.pythonPath": {
+          "type": "string",
+          "default": "",
+          "description": "%cfg.pythonPath%",
+          "scope": "machine-overridable",
+          "order": 10
+        },
+        "deepfriend.errorReporting.prompt": {
+          "type": "boolean",
+          "default": true,
+          "description": "%cfg.errorReporting%",
+          "order": 11
+        }
+      }
+    }
+  },
   "scripts": {
     "copy-assets": "node scripts/copy-assets.mjs",
     "build": "npm run copy-assets && node esbuild.mjs",
