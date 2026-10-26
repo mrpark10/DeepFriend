@@ -7,6 +7,17 @@ on:
   workflow_call:
 
 jobs:
+  no-secrets:
+    name: no env files committed
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fail if any .env file is tracked
+        run: |
+          if git ls-files | grep -iE '(^|/)(\.env(\..*)?|[^/]*\.env|\.envrc)$' | grep -v '\.env\.example$'; then
+            echo "::error::.env files must never be committed"; exit 1
+          fi
+
   python:
     name: python ${{ matrix.python }} · ${{ matrix.os }}
     runs-on: ${{ matrix.os }}

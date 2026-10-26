@@ -18,3 +18,10 @@ extension/src/test/fixtures/workspace/f*/
 extension/src/test/fixtures/workspace/.deepfriend/
 extension/README.md
 extension/CHANGELOG.md
+
+# Secrets: never commit environment files
+.env
+.env.*
+*.env
+!.env.example
+.envrc
