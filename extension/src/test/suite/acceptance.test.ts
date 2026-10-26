@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { buildIssueUrl } from '../../reportUrl';
-import { api, waitFor, wsPath } from './helpers';
+import { api, shellCommand, testShell, waitFor, wsPath } from './helpers';
 
 const EXAMPLES = path.join(__dirname, '..', '..', '..', '..', 'examples');
 
@@ -16,11 +16,11 @@ suite('acceptance: a student’s first training run', () => {
     fs.copyFileSync(path.join(EXAMPLES, '05_doctor', '_data.py'), path.join(dir, '_data.py'));
     fs.copyFileSync(path.join(EXAMPLES, '05_doctor', 'nan.py'), path.join(dir, 'nan.py'));
     // The terminal gets PYTHONPATH from the extension: no `pip install deepfriend` anywhere.
-    const term = vscode.window.createTerminal({ name: 'student', shellPath: '/bin/zsh', cwd: dir });
+    const term = vscode.window.createTerminal({ name: 'student', shellPath: testShell(), cwd: dir });
     try {
       term.show();
       const si = await waitFor(() => term.shellIntegration, 20000);
-      si.executeCommand(`${process.env.DEEPFRIEND_TEST_PYTHON} nan.py`);
+      si.executeCommand(shellCommand(process.env.DEEPFRIEND_TEST_PYTHON!, 'nan.py'));
       const msg = await waitFor(() => {
         const m = a.doctor.view.lastMessage;
         return m?.run?.title === 'nan' && m.findings.length ? m : undefined;

@@ -27,3 +27,16 @@ export async function waitFor<T>(fn: () => T | undefined | null | false | Promis
     await new Promise((r) => setTimeout(r, stepMs));
   }
 }
+
+/** A shell with VS Code shell-integration support on this OS. */
+export function testShell(): string {
+  if (process.platform === 'win32') {
+    return 'powershell.exe';
+  }
+  return require('fs').existsSync('/bin/zsh') ? '/bin/zsh' : '/bin/bash';
+}
+
+/** Quote an executable path for the test shell (PowerShell needs the call operator). */
+export function shellCommand(exe: string, args: string): string {
+  return process.platform === 'win32' ? `& "${exe}" ${args}` : `"${exe}" ${args}`;
+}

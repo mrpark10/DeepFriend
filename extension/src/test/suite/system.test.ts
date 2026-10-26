@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
 import type { ReportedError } from '../../f3/errorHub';
-import { api, waitFor, wsPath } from './helpers';
+import { api, shellCommand, testShell, waitFor, wsPath } from './helpers';
 
 const MODEL = `import torch
 import torch.nn as nn
@@ -65,7 +65,7 @@ suite('system: end-to-end behaviour', () => {
     const sub = a.errors.hub.onError((e) => seen.push(e));
     const script = wsPath('f_sys', 'boom.py');
     fs.writeFileSync(script, 'import sys\nprint("starting")\nraise ValueError("terminal boom " + str(len(sys.argv)))\n');
-    const term = vscode.window.createTerminal({ name: 'df-system', shellPath: '/bin/zsh' });
+    const term = vscode.window.createTerminal({ name: 'df-system', shellPath: testShell() });
     try {
       term.show();
       const si = await waitFor(() => term.shellIntegration, 20000).catch(() => undefined);
@@ -74,7 +74,7 @@ suite('system: end-to-end behaviour', () => {
         this.skip();
         return;
       }
-      si.executeCommand(`${process.env.DEEPFRIEND_TEST_PYTHON} ${script}`);
+      si.executeCommand(shellCommand(process.env.DEEPFRIEND_TEST_PYTHON!, `"${script}"`));
       const got = await waitFor(() => seen.find((s) => s.source === 'terminal' && s.error.message.startsWith('terminal boom')), 30000);
       assert.strictEqual(got.error.type, 'ValueError');
       assert.strictEqual(got.error.frames[got.error.frames.length - 1].line, 3);
